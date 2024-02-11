@@ -3,6 +3,8 @@ import {imagesUpload} from '../multer';
 import {AlbumMutation} from '../types';
 import Album from '../models/Album';
 import mongoose, {Types} from 'mongoose';
+import Artist from '../models/Artist';
+
 
 const albumsRouter = Router();
 
@@ -23,6 +25,33 @@ albumsRouter.get('/', async (req, res, next) => {
     }
     
     res.send(albums);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+albumsRouter.get('/:id', async (req, res, next) => {
+  try {
+    let _id: Types.ObjectId;
+    try {
+      _id = new Types.ObjectId(req.params.id);
+    } catch {
+      return res.status(404).send({error: 'Wrong album ID!'});
+    }
+    
+    const album = await Album.findById(_id);
+    
+    if (!album) {
+      return res.status(404).send({error: 'Album not found!'});
+    }
+    
+    const artist = await Artist.findById(album.artist);
+    
+    if (!artist) {
+      return res.status(404).send({error: 'Artist not found!'});
+    }
+
+    res.send({...album.toObject(), artist});
   } catch (e) {
     return next(e);
   }

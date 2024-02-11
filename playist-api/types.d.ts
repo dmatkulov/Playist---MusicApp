@@ -9,3 +9,9 @@ export interface AlbumMutation {
   yearOfRelease: number,
   cover: string | null,
 }
+
+export interface TrackMutation {
+  album: string,
+  title: string,
+  duration: string,
+}
