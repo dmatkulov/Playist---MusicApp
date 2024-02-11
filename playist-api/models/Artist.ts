@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
 const ArtistSchema = new mongoose.Schema({
-  title: {
+  name: {
     type: String,
     required: true,
   },
-  description: String
+  about: String
 });
 
 const Artist = mongoose.model('Artist', ArtistSchema);
