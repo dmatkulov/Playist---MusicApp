@@ -2,6 +2,7 @@ import {Router} from 'express';
 import Artist from '../models/Artist';
 import {ArtistMutation} from '../types';
 import mongoose from 'mongoose';
+import {imagesUpload} from '../multer';
 
 const artistsRouter = Router();
 
@@ -15,11 +16,12 @@ artistsRouter.get('/', async (_req, res, next) => {
 });
 
 
-artistsRouter.post('/', async (req, res, next) => {
+artistsRouter.post('/', imagesUpload.single('cover'), async (req, res, next) => {
   try {
     const artistData: ArtistMutation = {
       name: req.body.name,
       about: req.body.about,
+      cover: req.file ? req.file.filename : null
     };
     
     const artist = new Artist(artistData);

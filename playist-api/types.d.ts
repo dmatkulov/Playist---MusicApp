@@ -1,6 +1,7 @@
 export interface ArtistMutation {
   name: string,
   about: string,
+  cover: string | null,
 }
 
 export interface AlbumMutation {

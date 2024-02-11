@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {TrackMutation} from '../types';
 import {Types} from 'mongoose';
 import Track from '../models/Track';
+import Album from '../models/Album';
 
 const tracksRouter = Router();
 
@@ -9,14 +10,35 @@ tracksRouter.get('/', async (req, res, next) => {
   try {
     let tracks;
     const albumId = req.query.album;
+    const artistId = req.query.artist;
     
-    if (albumId && typeof albumId === 'string') {
+    if (albumId) {
+      
       try {
-        new Types.ObjectId(albumId);
+        new Types.ObjectId(albumId.toString());
       } catch {
         return res.status(404).send({error: 'Wrong album ID!'});
       }
       tracks = await Track.find({album: albumId});
+      
+    } else if (artistId) {
+      
+      try {
+        new Types.ObjectId(artistId.toString());
+      } catch {
+        return res.status(404).send({error: 'Wrong artist ID!'});
+      }
+      
+      const albums = await Album.find({artist: artistId});
+      const allTracks = albums.map((album) => {
+        return Track.find({album: album._id});
+      });
+      const allTracksByArtist = await Promise.all(allTracks);
+      
+      tracks = allTracksByArtist.reduce((acc, track) => {
+        return acc.concat(track);
+      }, []);
+      
     } else {
       tracks = await Track.find();
     }

@@ -13,9 +13,9 @@ albumsRouter.get('/', async (req, res, next) => {
     let albums;
     const artistId = req.query.artist;
     
-    if (artistId && typeof artistId === 'string') {
+    if (artistId) {
       try {
-        new Types.ObjectId(artistId);
+        new Types.ObjectId(artistId.toString());
       } catch {
         return res.status(404).send({error: 'Wrong artist ID!'});
       }
@@ -50,7 +50,7 @@ albumsRouter.get('/:id', async (req, res, next) => {
     if (!artist) {
       return res.status(404).send({error: 'Artist not found!'});
     }
-
+    
     res.send({...album.toObject(), artist});
   } catch (e) {
     return next(e);
