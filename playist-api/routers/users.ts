@@ -23,4 +23,27 @@ usersRouter.post('/', async (req, res, next) => {
     next(e);
   }
 });
+
+usersRouter.post('/sessions', async (req, res, next) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+
+    if (!user) {
+      return res.status(422).send({ error: 'Invalid credentials' });
+    }
+
+    const isMatch = await user.checkPassword(req.body.password);
+
+    if (!isMatch) {
+      return res.status(422).send({ error: 'Username and password do not match' });
+    }
+
+    user.generateToken();
+    await user.save();
+
+    return res.send({ message: 'Username and password are correct', user });
+  } catch (e) {
+    next(e);
+  }
+});
 export default usersRouter;
