@@ -1,4 +1,4 @@
-import mongoose, {Schema, Types} from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import Album from './Album';
 
 const TrackSchema = new mongoose.Schema({
@@ -12,7 +12,7 @@ const TrackSchema = new mongoose.Schema({
         return Boolean(track);
       },
       message: 'Album does not exist!',
-    }
+    },
   },
   title: {
     type: String,

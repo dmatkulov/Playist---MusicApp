@@ -1,6 +1,6 @@
-import {Router} from 'express';
-import {TrackMutation} from '../types';
-import {Types} from 'mongoose';
+import { Router } from 'express';
+import { TrackMutation } from '../types';
+import { Types } from 'mongoose';
 import Track from '../models/Track';
 import Album from '../models/Album';
 
@@ -11,38 +11,34 @@ tracksRouter.get('/', async (req, res, next) => {
     let tracks;
     const albumId = req.query.album;
     const artistId = req.query.artist;
-    
+
     if (albumId) {
-      
       try {
         new Types.ObjectId(albumId.toString());
       } catch {
-        return res.status(404).send({error: 'Wrong album ID!'});
+        return res.status(404).send({ error: 'Wrong album ID!' });
       }
-      tracks = await Track.find({album: albumId});
-      
+      tracks = await Track.find({ album: albumId });
     } else if (artistId) {
-      
       try {
         new Types.ObjectId(artistId.toString());
       } catch {
-        return res.status(404).send({error: 'Wrong artist ID!'});
+        return res.status(404).send({ error: 'Wrong artist ID!' });
       }
-      
-      const albums = await Album.find({artist: artistId});
+
+      const albums = await Album.find({ artist: artistId });
       const allTracks = albums.map((album) => {
-        return Track.find({album: album._id});
+        return Track.find({ album: album._id });
       });
       const allTracksByArtist = await Promise.all(allTracks);
-      
+
       tracks = allTracksByArtist.reduce((acc, track) => {
         return acc.concat(track);
       }, []);
-      
     } else {
       tracks = await Track.find();
     }
-    
+
     res.send(tracks);
   } catch (e) {
     return next(e);
@@ -54,12 +50,12 @@ tracksRouter.post('/', async (req, res, next) => {
     const trackData: TrackMutation = {
       album: req.body.album,
       title: req.body.title,
-      duration: req.body.duration
+      duration: req.body.duration,
     };
-    
+
     const track = new Track(trackData);
     await track.save();
-    
+
     res.send(track);
   } catch (e) {
     return next(e);

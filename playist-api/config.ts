@@ -6,7 +6,7 @@ const config = {
   rootPath,
   publicPath: path.join(rootPath, 'public'),
   mongoose: {
-    db: 'mongodb://localhost/playist'
-  }
+    db: 'mongodb://localhost/playist',
+  },
 };
 export default config;

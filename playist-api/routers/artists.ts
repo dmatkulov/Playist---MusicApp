@@ -1,8 +1,8 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import Artist from '../models/Artist';
-import {ArtistMutation} from '../types';
+import { ArtistMutation } from '../types';
 import mongoose from 'mongoose';
-import {imagesUpload} from '../multer';
+import { imagesUpload } from '../multer';
 
 const artistsRouter = Router();
 
@@ -15,26 +15,29 @@ artistsRouter.get('/', async (_req, res, next) => {
   }
 });
 
+artistsRouter.post(
+  '/',
+  imagesUpload.single('cover'),
+  async (req, res, next) => {
+    try {
+      const artistData: ArtistMutation = {
+        name: req.body.name,
+        about: req.body.about,
+        cover: req.file ? req.file.filename : null,
+      };
 
-artistsRouter.post('/', imagesUpload.single('cover'), async (req, res, next) => {
-  try {
-    const artistData: ArtistMutation = {
-      name: req.body.name,
-      about: req.body.about,
-      cover: req.file ? req.file.filename : null
-    };
-    
-    const artist = new Artist(artistData);
-    
-    await artist.save();
-    return res.send(artist);
-  } catch (e) {
-    if (e instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(e);
+      const artist = new Artist(artistData);
+
+      await artist.save();
+      return res.send(artist);
+    } catch (e) {
+      if (e instanceof mongoose.Error.ValidationError) {
+        return res.status(422).send(e);
+      }
+
+      next(e);
     }
-    
-    next(e);
-  }
-});
+  },
+);
 
 export default artistsRouter;

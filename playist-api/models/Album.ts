@@ -1,4 +1,4 @@
-import mongoose, {Schema, Types} from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import Artist from './Artist';
 
 const AlbumSchema = new mongoose.Schema({
@@ -12,7 +12,7 @@ const AlbumSchema = new mongoose.Schema({
         return Boolean(artist);
       },
       message: 'Artist does not exist!',
-    }
+    },
   },
   title: {
     type: String,
@@ -20,7 +20,7 @@ const AlbumSchema = new mongoose.Schema({
   },
   yearOfRelease: {
     type: Number,
-    required: true
+    required: true,
   },
   cover: String,
 });
