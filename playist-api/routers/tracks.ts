@@ -21,7 +21,7 @@ tracksRouter.get('/', async (req, res, next) => {
       }
       const album = await Album.findById(albumId);
       const artist = await Artist.findById(album?.artist);
-      const allTracks = await Track.find({ album: albumId }).sort({ listing: -1 });
+      const allTracks = await Track.find({ album: albumId }).sort({ listing: 1 });
 
       tracks = {
         artist,

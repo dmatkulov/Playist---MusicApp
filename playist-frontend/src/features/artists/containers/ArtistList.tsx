@@ -22,8 +22,8 @@ const ArtistList: React.FC = () => {
 
   return (
     <Container>
-      <Typography variant="h1" color="seagreen">
-        Popular artists
+      <Typography variant="h1" component="h2" color="seagreen">
+        Timeless Classics
       </Typography>
       <Divider sx={{ borderColor: 'seagreen' }} />
       <Grid

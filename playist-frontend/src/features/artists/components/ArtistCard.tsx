@@ -1,5 +1,11 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { Artist } from '../../../types';
@@ -12,12 +18,12 @@ interface Props {
 
 const ArtistCard: React.FC<Props> = ({ artist }) => {
   const navigate = useNavigate();
-  
+
   let cardImage = noCoverImage;
   if (artist.cover) {
     cardImage = apiURL + '/' + artist.cover;
   }
-  
+
   return (
     <Card
       sx={{

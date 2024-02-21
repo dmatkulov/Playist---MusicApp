@@ -1,11 +1,19 @@
 import React from 'react';
-import { Box, Card, CardContent, CardMedia, Divider, Grid, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import { AlbumMutation } from '../../../types';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { apiURL } from '../../../constants';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { useNavigate } from 'react-router-dom';
-
 
 interface Props {
   album: AlbumMutation;
@@ -13,7 +21,7 @@ interface Props {
 
 const AlbumCard: React.FC<Props> = ({ album }) => {
   const navigate = useNavigate();
-  
+
   let cardImage = noCoverImage;
   if (album.cover) {
     cardImage = apiURL + '/' + album.cover;
@@ -39,14 +47,16 @@ const AlbumCard: React.FC<Props> = ({ album }) => {
         />
         <CardContent sx={{ flex: '1 0 auto' }}>
           <Box>
-            <Typography
-              gutterBottom
-              variant="h6"
-            >
+            <Typography gutterBottom variant="h6">
               {album.title}
             </Typography>
             <Divider />
-            <Grid container justifyContent="space-between" alignItems="center" mt={2}>
+            <Grid
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              mt={2}
+            >
               <Typography
                 display="block"
                 variant="subtitle2"
@@ -54,7 +64,9 @@ const AlbumCard: React.FC<Props> = ({ album }) => {
               >
                 {album.yearOfRelease}
               </Typography>
-              <IconButton onClick={() => navigate('/albums/tracks/' + album._id)}>
+              <IconButton
+                onClick={() => navigate('/albums/tracks/' + album._id)}
+              >
                 <PlayCircleIcon fontSize="medium" />
               </IconButton>
             </Grid>

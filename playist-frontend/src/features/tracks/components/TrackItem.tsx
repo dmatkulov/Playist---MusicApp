@@ -17,10 +17,14 @@ const TrackItem: React.FC<Props> = ({ track }) => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Typography variant="body2" color="gray">{track.listing}</Typography>
+          <Typography variant="body2" color="gray">
+            {track.listing}
+          </Typography>
         </Grid>
         <Grid item flexGrow={1}>
-          <Typography variant="h6" fontWeight="bold">{track.title}</Typography>
+          <Typography variant="h6" fontWeight="bold">
+            {track.title}
+          </Typography>
         </Grid>
         <Grid item width="200px">
           <Slider

@@ -18,6 +18,7 @@ interface AlbumMutation {
 }
 
 export interface TrackMutation {
+  _id: string;
   album: string;
   title: string;
   duration: string;

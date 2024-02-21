@@ -37,13 +37,14 @@ const run = async () => {
       cover: 'fixtures/Pink_Floyd.jpeg',
     },
     {
-      name: 'The Rolling Stones',
-      about: 'The Rolling Stones are an English rock band formed in London in 1962.',
-      cover: 'fixtures/rolling-stones.jpg',
+      name: 'Guns N’ Roses',
+      about:
+        "Guns N' Roses is an American hard rock band from Los Angeles, California, formed in March 1985 when local bands Hollywood Rose and L.A. Guns merged.",
+      cover: 'fixtures/guns-and-roses.jpg',
     },
   );
 
-  const [album1, album2, album3, album4] = await Album.create(
+  const [album1, album2, album3, album4, album5, album6] = await Album.create(
     {
       artist: artist1,
       title: 'Abbey Road',
@@ -64,14 +65,21 @@ const run = async () => {
     },
     {
       artist: artist2,
-      title: 'The Wall',
-      yearOfRelease: 1979,
+      title: 'Wish You Were Here',
+      yearOfRelease: 1975,
+      cover: 'fixtures/WishYouWereHere.jpg',
     },
     {
       artist: artist3,
-      title: 'Aftermath',
-      yearOfRelease: 1996,
-      cover: 'fixtures/aftermath.jpg',
+      title: 'Use Your Illusion I',
+      yearOfRelease: 1991,
+      cover: 'fixtures/GnR--UseYourIllusion1.jpg',
+    },
+    {
+      artist: artist3,
+      title: 'Live On Air',
+      yearOfRelease: 2010,
+      cover: 'fixtures/guns-n-roses-lp-picture-disc-live-on-air.jpg',
     },
   );
 
@@ -84,27 +92,183 @@ const run = async () => {
     },
     {
       album: album1,
-      title: 'Eleanor Rigby',
-      duration: '3:03',
+      title: 'Oh! Darling',
+      duration: '3:27',
       listing: 2,
     },
     {
-      album: album3,
-      title: 'Money',
-      duration: '6:22',
+      album: album1,
+      title: 'Here Comes the Sun',
+      duration: '3:06',
+      listing: 3,
+    },
+    {
+      album: album1,
+      title: 'Something',
+      duration: '3:03',
+      listing: 4,
+    },
+    {
+      album: album1,
+      title: 'Because',
+      duration: '2:46',
+      listing: 5,
+    },
+    {
+      album: album2,
+      title: 'Taxman',
+      duration: '2:41',
+      listing: 1,
+    },
+    {
+      album: album2,
+      title: 'Love You To',
+      duration: '3:10',
+      listing: 2,
+    },
+    {
+      album: album2,
+      title: 'Eleanor Rigby',
+      duration: '2:06',
       listing: 3,
     },
     {
       album: album2,
-      title: 'I Am Waiting',
-      duration: '3:10',
+      title: 'Here, There and Everywhere',
+      duration: '2:26',
+      listing: 4,
+    },
+    {
+      album: album2,
+      title: "I'm Only Sleeping",
+      duration: '3:02',
+      listing: 5,
+    },
+    {
+      album: album3,
+      title: 'Speak to Me',
+      duration: '1:30',
+      listing: 1,
+    },
+    {
+      album: album3,
+      title: 'Breathe',
+      duration: '2:43',
+      listing: 2,
+    },
+    {
+      album: album3,
+      title: 'On the Run',
+      duration: '3:30',
+      listing: 3,
+    },
+    {
+      album: album3,
+      title: 'Time',
+      duration: '7:06',
+      listing: 4,
+    },
+    {
+      album: album3,
+      title: 'The Great Gig in the Sky',
+      duration: '4:47',
+      listing: 5,
+    },
+    {
+      album: album4,
+      title: 'Shine On You Crazy Diamond (Parts I-V)',
+      duration: '13:32',
+      listing: 1,
+    },
+    {
+      album: album4,
+      title: 'Welcome to the Machine',
+      duration: '7:30',
+      listing: 2,
+    },
+    {
+      album: album4,
+      title: 'Have a Cigar',
+      duration: '5:08',
+      listing: 3,
+    },
+    {
+      album: album4,
+      title: 'Wish You Were Here',
+      duration: '5:40',
       listing: 4,
     },
     {
       album: album4,
-      title: 'Lady Jane',
-      duration: '3:06',
+      title: 'Shine On You Crazy Diamond (Parts VI-IX)',
+      duration: '12:29',
       listing: 5,
+    },
+    {
+      album: album5,
+      title: 'November Rain',
+      duration: '8:57',
+      listing: 1,
+    },
+    {
+      album: album5,
+      title: "Don't Cry",
+      duration: '4:44',
+      listing: 2,
+    },
+    {
+      album: album5,
+      title: 'Live and Let Die',
+      duration: '2:58',
+      listing: 3,
+    },
+    {
+      album: album5,
+      title: "Knockin' on Heaven's Door",
+      duration: '5:36',
+      listing: 4,
+    },
+    {
+      album: album5,
+      title: 'Civil War',
+      duration: '7:36',
+      listing: 5,
+    },
+    {
+      album: album5,
+      title: 'Estranged',
+      duration: '9:23',
+      listing: 6,
+    },
+    {
+      album: album6,
+      title: 'Free Falling',
+      duration: '4:21',
+      listing: 1,
+    },
+    {
+      album: album6,
+      title: 'Patience',
+      duration: '6:49',
+      listing: 2,
+    },
+    {
+      album: album6,
+      title: 'Live and Let Die',
+      duration: '3:17',
+      listing: 4,
+    },
+    {
+      album: album6,
+      title: 'Down on the Farm',
+      duration: '3:43',
+      listing: 5,
+    },
+    {
+      album: album6,
+      title: 'Welcome to the Jungle',
+      duration: '4:26',
+      listing: 3,
     },
   );
 
@@ -148,6 +312,8 @@ const run = async () => {
       datetime: new Date().toISOString(),
     },
   );
+
+  await db.close();
 };
 
 void run();

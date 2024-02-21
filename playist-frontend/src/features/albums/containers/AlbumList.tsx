@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { CircularProgress, Container, Divider, Grid, Stack, Typography } from '@mui/material';
+import {
+  CircularProgress,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectAlbums, selectAlbumsLoading } from '../albumsSlice';
 import { fetchAlbums } from '../albumsThunk';
@@ -11,28 +18,30 @@ const AlbumList: React.FC = () => {
   const albums = useAppSelector(selectAlbums);
   const isLoading = useAppSelector(selectAlbumsLoading);
   const { artistId } = useParams() as { artistId: string };
-  
+
   useEffect(() => {
     dispatch(fetchAlbums(artistId));
   }, [dispatch]);
-  
-  return albums && (
-    <Container>
-      {isLoading && <CircularProgress />}
-      <Stack direction="column" spacing={3}>
-        {albums && <Typography variant="h4">{albums.artist}</Typography>}
-        <Divider />
-      </Stack>
-      
-      <Grid item container spacing={2} py={4} mt={4}>
-        {albums.albums.length > 0 &&
-          albums.albums.map((album) => (
-            <Grid key={album._id} item xs={4}>
-              <AlbumCard album={album} />
-            </Grid>
-          ))}
-      </Grid>
-    </Container>
+
+  return (
+    albums && (
+      <Container>
+        {isLoading && <CircularProgress />}
+        <Stack direction="column" spacing={3}>
+          {albums && <Typography variant="h4">{albums.artist}</Typography>}
+          <Divider />
+        </Stack>
+
+        <Grid item container spacing={2} py={4} mt={4}>
+          {albums.albums.length > 0 &&
+            albums.albums.map((album) => (
+              <Grid key={album._id} item xs={4}>
+                <AlbumCard album={album} />
+              </Grid>
+            ))}
+        </Grid>
+      </Container>
+    )
   );
 };
 
