@@ -1,5 +1,11 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { Artist } from '../../../types';
@@ -13,11 +19,11 @@ interface Props {
 const ArtistCard: React.FC<Props> = ({ artist }) => {
   let cardImage = noCoverImage;
   const navigate = useNavigate();
-  
+
   if (artist.cover) {
     cardImage = apiURL + '/' + artist.cover;
   }
-  
+
   return (
     <Card
       sx={{
@@ -41,7 +47,8 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           flex: '1 0 auto',
-        }}>
+        }}
+      >
         <Typography component="div" variant="h5">
           {artist.name}
         </Typography>

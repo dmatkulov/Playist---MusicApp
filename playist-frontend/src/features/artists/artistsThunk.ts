@@ -7,7 +7,7 @@ export const fetchArtists = createAsyncThunk<Artist[]>(
   'artists/fetchAll',
   async () => {
     const response = await axiosApi.get<Artist[]>(routes.artists);
-    
+
     return response.data ?? [];
   },
 );

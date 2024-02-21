@@ -6,9 +6,13 @@ export interface Artist {
 }
 
 export interface Album {
+  artist: string;
+  albums: AlbumMutation[];
+}
+
+interface AlbumMutation {
   _id: string;
   title: string;
   yearOfRelease: number;
-  totalTracks: number;
   cover: string | null;
 }

@@ -7,11 +7,10 @@ import AlbumList from './features/albums/containers/AlbumList';
 function App() {
   return (
     <>
-      Main app
-      <header>
-        <AppToolbar />
-      </header>
       <Container maxWidth="lg">
+        <header>
+          <AppToolbar />
+        </header>
         <Routes>
           <Route path="/" element={<ArtistList />} />
           <Route path="/albums/:artistId" element={<AlbumList />} />
