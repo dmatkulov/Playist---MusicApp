@@ -3,8 +3,6 @@ import Artist from '../models/Artist';
 import { ArtistMutation } from '../types';
 import mongoose, { Types } from 'mongoose';
 import { imagesUpload } from '../multer';
-import Album from '../models/Album';
-import albumsRouter from './albums';
 
 const artistsRouter = Router();
 
