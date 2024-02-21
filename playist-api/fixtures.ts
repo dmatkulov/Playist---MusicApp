@@ -63,6 +63,11 @@ const run = async () => {
       cover: 'fixtures/Dark_Side_of_the_Moon.jpeg',
     },
     {
+      artist: artist2,
+      title: 'The Dark Side',
+      yearOfRelease: 2000,
+    },
+    {
       artist: artist3,
       title: 'Aftermath',
       yearOfRelease: 1996,
@@ -78,7 +83,7 @@ const run = async () => {
       listing: 1,
     },
     {
-      album: album2,
+      album: album1,
       title: 'Eleanor Rigby',
       duration: '3:03',
       listing: 2,
@@ -90,7 +95,7 @@ const run = async () => {
       listing: 3,
     },
     {
-      album: album4,
+      album: album2,
       title: 'I Am Waiting',
       duration: '3:10',
       listing: 4,

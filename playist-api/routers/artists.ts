@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import Artist from '../models/Artist';
 import { ArtistMutation } from '../types';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { imagesUpload } from '../multer';
+import Album from '../models/Album';
+import albumsRouter from './albums';
 
 const artistsRouter = Router();
 
@@ -10,6 +12,27 @@ artistsRouter.get('/', async (_req, res, next) => {
   try {
     const artists = await Artist.find();
     res.send(artists);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+artistsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const artistId = req.params.id;
+    try {
+      new Types.ObjectId(artistId);
+    } catch {
+      return res.status(404).send({ error: 'Wrong artist ID!' });
+    }
+
+    const artist = await Artist.findById(artistId);
+
+    if (!artist) {
+      return res.status(404).send({ error: 'Artist not found!' });
+    }
+
+    res.send(artist);
   } catch (e) {
     return next(e);
   }

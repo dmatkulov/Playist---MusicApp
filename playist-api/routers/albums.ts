@@ -3,6 +3,7 @@ import { imagesUpload } from '../multer';
 import { AlbumMutation } from '../types';
 import Album from '../models/Album';
 import mongoose, { Types } from 'mongoose';
+import Artist from '../models/Artist';
 
 const albumsRouter = Router();
 
@@ -17,7 +18,17 @@ albumsRouter.get('/', async (req, res, next) => {
       } catch {
         return res.status(404).send({ error: 'Wrong artist ID!' });
       }
-      albums = await Album.find({ artist: req.query.artist });
+
+      const allAlbums: AlbumMutation[] = await Album.aggregate([
+        { $match: { artist: new mongoose.Types.ObjectId(`${artistId}`) } },
+        { $sort: { yearOfRelease: -1 } },
+      ]);
+
+      const artist = await Artist.findById(artistId);
+      albums = {
+        artist: artist?.name,
+        albums: allAlbums,
+      };
     } else {
       albums = await Album.find();
     }
