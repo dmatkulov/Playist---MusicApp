@@ -64,8 +64,8 @@ const run = async () => {
     },
     {
       artist: artist2,
-      title: 'The Dark Side',
-      yearOfRelease: 2000,
+      title: 'The Wall',
+      yearOfRelease: 1979,
     },
     {
       artist: artist3,

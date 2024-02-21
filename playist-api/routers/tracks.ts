@@ -3,6 +3,7 @@ import { TrackMutation } from '../types';
 import { Types } from 'mongoose';
 import Track from '../models/Track';
 import Album from '../models/Album';
+import Artist from '../models/Artist';
 
 const tracksRouter = Router();
 
@@ -18,7 +19,15 @@ tracksRouter.get('/', async (req, res, next) => {
       } catch {
         return res.status(404).send({ error: 'Wrong album ID!' });
       }
-      tracks = await Track.find({ album: albumId });
+      const album = await Album.findById(albumId);
+      const artist = await Artist.findById(album?.artist);
+      const allTracks = await Track.find({ album: albumId }).sort({ listing: -1 });
+
+      tracks = {
+        artist,
+        album,
+        tracks: allTracks,
+      };
     } else if (artistId) {
       try {
         new Types.ObjectId(artistId.toString());

@@ -16,3 +16,16 @@ interface AlbumMutation {
   yearOfRelease: number;
   cover: string | null;
 }
+
+export interface TrackMutation {
+  album: string;
+  title: string;
+  duration: string;
+  listing: string;
+}
+
+export interface Track {
+  artist: Artist;
+  album: AlbumMutation;
+  tracks: TrackMutation[];
+}

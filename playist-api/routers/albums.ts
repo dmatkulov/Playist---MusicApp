@@ -19,10 +19,7 @@ albumsRouter.get('/', async (req, res, next) => {
         return res.status(404).send({ error: 'Wrong artist ID!' });
       }
 
-      const allAlbums: AlbumMutation[] = await Album.aggregate([
-        { $match: { artist: new mongoose.Types.ObjectId(`${artistId}`) } },
-        { $sort: { yearOfRelease: -1 } },
-      ]);
+      const allAlbums = await Album.find({ artist: artistId }).sort({ yearOfRelease: -1 });
 
       const artist = await Artist.findById(artistId);
       albums = {

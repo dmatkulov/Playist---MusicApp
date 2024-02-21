@@ -3,11 +3,11 @@ import { Album } from '../../types';
 import axiosApi from '../../axiosApi';
 import { routes } from '../../constants';
 
-export const fetchArtistAlbums = createAsyncThunk<Album | null, string>(
-  'albums/fetchArtistAlbums',
+export const fetchAlbums = createAsyncThunk<Album | null, string>(
+  'albums/fetchAll',
   async (artistId) => {
-    const response = await axiosApi.get<Album>(routes.artistAlbums + artistId);
-    console.log(response.data);
+    const response = await axiosApi.get<Album | null>(routes.albums + artistId);
+    
     return response.data ?? null;
   },
 );

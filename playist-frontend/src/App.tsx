@@ -14,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ArtistList />} />
           <Route path="/albums/:artistId" element={<AlbumList />} />
+          {/*<Route path="/albums/tracks/:albumId" element={<TrackList />} />*/}
           <Route path="*" element={<h2>Not found!</h2>} />
         </Routes>
       </Container>
