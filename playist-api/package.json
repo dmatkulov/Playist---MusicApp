@@ -9,7 +9,7 @@
     "typecheck": "tsc --noemit",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "seed": "ts-node fixtures/fixtures.ts"
+    "seed": "ts-node fixtures.ts"
   },
   "keywords": [],
   "author": "",

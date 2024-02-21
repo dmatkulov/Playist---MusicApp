@@ -1,36 +1,55 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Grid } from '@mui/material';
-import { Info } from '@mui/icons-material';
+import { Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
+import { Artist } from '../../../types';
+import { apiURL } from '../../../constants';
+import { useNavigate } from 'react-router-dom';
 
-const ArtistCard: React.FC = () => {
+interface Props {
+  artist: Artist;
+}
+
+const ArtistCard: React.FC<Props> = ({ artist }) => {
+  let cardImage = noCoverImage;
+  const navigate = useNavigate();
+  
+  if (artist.cover) {
+    cardImage = apiURL + '/' + artist.cover;
+  }
+  
   return (
-    <Grid item xs={4}>
-      <Card
+    <Card
+      sx={{
+        borderRadius: '12px',
+        padding: 1.5,
+        boxShadow: '0px 14px 80px rgba(34, 35, 58, 0.2)',
+      }}
+    >
+      <CardMedia
+        image={cardImage}
         sx={{
-          borderRadius: '12px',
-          padding: 1.5,
-          boxShadow: 0,
+          borderRadius: '6px',
+          width: '100%',
+          height: '200px',
+          backgroundColor: 'rgba(0,0,0,0.8)',
         }}
-      >
-        <CardMedia
-          image={
-            'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80'
-          }
-          sx={{
-            borderRadius: '6px',
-            width: '100%',
-            height: 0,
-            paddingBottom: 'min(75%, 240px)',
-            backgroundColor: 'rgba(0,0,0,0.08)',
-          }}
-        />
-        <CardContent>
-          <Info>
-            Info
-          </Info>
-        </CardContent>
-      </Card>
-    </Grid>
+      />
+      <CardContent
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flex: '1 0 auto',
+        }}>
+        <Typography component="div" variant="h5">
+          {artist.name}
+        </Typography>
+        <IconButton onClick={() => navigate('/albums/' + artist._id)}>
+          <PlayCircleIcon fontSize="large" sx={{ color: 'seagreen' }} />
+        </IconButton>
+      </CardContent>
+    </Card>
   );
 };
 

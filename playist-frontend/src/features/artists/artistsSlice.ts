@@ -32,4 +32,4 @@ export const artistsSlice = createSlice({
 export const artistsReducer = artistsSlice.reducer;
 
 export const selectArtists = (state: RootState) => state.artists.items;
-export const selectFetchLoading = (state: RootState) => state.artists.fetchLoading;
+export const selectArtistsLoading = (state: RootState) => state.artists.fetchLoading;
