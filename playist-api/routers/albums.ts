@@ -20,10 +20,14 @@ albumsRouter.get('/', async (req, res, next) => {
       }
 
       const allAlbums = await Album.find({ artist: artistId }).sort({ yearOfRelease: -1 });
-
       const artist = await Artist.findById(artistId);
+
+      if (!artist) {
+        return res.status(404).send({ error: 'Artist not found!' });
+      }
+
       albums = {
-        artist: artist?.name,
+        artist: artist.name,
         albums: allAlbums,
       };
     } else {

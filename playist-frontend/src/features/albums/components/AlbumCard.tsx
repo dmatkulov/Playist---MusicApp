@@ -1,27 +1,18 @@
 import React from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Divider,
-  Grid,
-  IconButton,
-  Typography,
-} from '@mui/material';
-import { AlbumMutation } from '../../../types';
+import { Box, Card, CardContent, CardMedia, Divider, Grid, IconButton, Typography } from '@mui/material';
+import { Album } from '../../../types';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { apiURL } from '../../../constants';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
-  album: AlbumMutation;
+  album: Album;
 }
 
 const AlbumCard: React.FC<Props> = ({ album }) => {
   const navigate = useNavigate();
-
+  
   let cardImage = noCoverImage;
   if (album.cover) {
     cardImage = apiURL + '/' + album.cover;

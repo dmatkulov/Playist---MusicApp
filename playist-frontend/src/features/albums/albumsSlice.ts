@@ -1,10 +1,10 @@
-import { Album } from '../../types';
+import { AlbumMutation } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { fetchAlbums } from './albumsThunk';
 
 interface AlbumsState {
-  items: Album | null;
+  items: AlbumMutation | null;
   fetchLoading: boolean;
 }
 

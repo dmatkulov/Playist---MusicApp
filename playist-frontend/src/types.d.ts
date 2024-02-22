@@ -5,12 +5,12 @@ export interface Artist {
   cover: string | null;
 }
 
-export interface Album {
+export interface AlbumMutation {
   artist: string;
-  albums: AlbumMutation[];
+  albums: Album[];
 }
 
-interface AlbumMutation {
+interface Album {
   _id: string;
   title: string;
   yearOfRelease: number;
@@ -27,6 +27,6 @@ export interface TrackMutation {
 
 export interface Track {
   artist: Artist;
-  album: AlbumMutation;
+  album: Album;
   tracks: TrackMutation[];
 }

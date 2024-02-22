@@ -1,25 +1,20 @@
 import React, { useEffect } from 'react';
 import ArtistCard from '../components/ArtistCard';
-import {
-  CircularProgress,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Container, Divider, Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectArtists, selectArtistsLoading } from '../artistsSlice';
 import { fetchArtists } from '../artistsThunk';
+import LoadingPage from '../../../components/UI/LoadingPage/LoadingPage';
 
 const ArtistList: React.FC = () => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
   const isLoading = useAppSelector(selectArtistsLoading);
-
+  
   useEffect(() => {
     dispatch(fetchArtists());
   }, [dispatch]);
-
+  
   return (
     <Container>
       <Typography variant="h1" component="h2" color="seagreen">
@@ -34,7 +29,7 @@ const ArtistList: React.FC = () => {
         py={4}
         mt={4}
       >
-        {isLoading && <CircularProgress />}
+        {isLoading && <LoadingPage />}
         {artists.length > 0 &&
           artists.map((artist) => (
             <Grid key={artist._id} item xs={4}>

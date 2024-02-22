@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, IconButton, Slider, Typography } from '@mui/material';
+import { Grid, IconButton, Typography } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { TrackMutation } from '../../../types';
 
@@ -25,15 +25,6 @@ const TrackItem: React.FC<Props> = ({ track }) => {
           <Typography variant="h6" fontWeight="bold">
             {track.title}
           </Typography>
-        </Grid>
-        <Grid item width="200px">
-          <Slider
-            size="small"
-            defaultValue={0}
-            aria-label="Small"
-            valueLabelDisplay="auto"
-            color="secondary"
-          />
         </Grid>
         <Grid item>
           <Typography variant="body2">{track.duration}</Typography>
