@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { UserFields, UserMethods, UserModel } from '../types';
 import { randomUUID } from 'crypto';
@@ -12,6 +12,19 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     type: String,
     required: true,
     unique: true,
+    validate: {
+      validator: async function(
+        this: HydratedDocument<UserFields>,
+        username: string,
+      ): Promise<boolean> {
+        if (!this.isModified('username')) return true;
+        const user: HydratedDocument<UserFields> | null = await User.findOne({
+          username: username,
+        });
+        return !user;
+      },
+      message: 'This user is already registered',
+    },
   },
   password: {
     type: String,
@@ -23,19 +36,19 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   },
 });
 
-UserSchema.methods.checkPassword = function (password: string) {
+UserSchema.methods.checkPassword = function(password: string) {
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.generateToken = function () {
+UserSchema.methods.generateToken = function() {
   this.token = randomUUID();
 };
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     return next();
   }
-
+  
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
   this.password = await bcrypt.hash(this.password, salt);
   next();

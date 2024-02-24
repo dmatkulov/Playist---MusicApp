@@ -4,5 +4,6 @@ export const routes = {
   artists: '/artists',
   albums: 'albums?artist=',
   tracks: '/tracks?album=',
-  users: '/users',
+  register: '/users',
+  login: '/users/sessions',
 };

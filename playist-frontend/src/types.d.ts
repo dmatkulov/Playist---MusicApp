@@ -38,7 +38,12 @@ export interface Track {
   tracks: TrackMutation[];
 }
 
-export interface RegisterMutation {
+export interface UserForm {
+  username: string;
+  password: string;
+}
+
+export interface LoginMutation {
   username: string;
   password: string;
 }

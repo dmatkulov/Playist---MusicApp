@@ -1,6 +1,6 @@
 import { GlobalError, User, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser } from './usersThunks';
+import { login, register } from './usersThunks';
 import { RootState } from '../../app/store';
 
 interface UserState {
@@ -22,20 +22,38 @@ const initialState: UserState = {
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    logOutUser: (state, { payload: action }) => {
+      state.user = action;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(register.pending, (state) => {
         state.registerLoading = true;
         state.registerError = null;
       })
-      .addCase(registerUser.fulfilled, (state, { payload: data }) => {
+      .addCase(register.fulfilled, (state, { payload: data }) => {
         state.registerLoading = false;
         state.user = data.user;
       })
-      .addCase(registerUser.rejected, (state, { payload: error }) => {
+      .addCase(register.rejected, (state, { payload: error }) => {
         state.registerLoading = false;
         state.registerError = error || null;
+      });
+    
+    builder
+      .addCase(login.pending, (state) => {
+        state.loginLoading = true;
+        state.loginError = null;
+      })
+      .addCase(login.fulfilled, (state, { payload: data }) => {
+        state.loginLoading = false;
+        state.user = data.user;
+      })
+      .addCase(login.rejected, (state, { payload: error }) => {
+        state.loginLoading = false;
+        state.loginError = error || null;
       });
   },
 });
@@ -46,3 +64,8 @@ export const selectRegisterLoading = (state: RootState) =>
   state.users.registerLoading;
 export const selectRegisterError = (state: RootState) =>
   state.users.registerError;
+export const selectLoginLoading = (state: RootState) =>
+  state.users.loginLoading;
+export const selectLoginError = (state: RootState) => state.users.loginError;
+
+export const { logOutUser } = usersSlice.actions;

@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectRegisterError } from '../usersSlice';
-import { registerUser } from '../usersThunks';
-import { RegisterMutation } from '../../../types';
+import { UserForm, ValidationError } from '../../../types';
 
-const Register = () => {
-  const dispatch = useAppDispatch();
-  const error = useAppSelector(selectRegisterError);
-  const navigate = useNavigate();
-  
-  const [state, setState] = useState<RegisterMutation>({
+interface Props {
+  error: ValidationError;
+  onSubmit: (state: UserForm) => void;
+  login?: boolean;
+}
+
+const UserForm: React.FC<Props> = ({ error, onSubmit, login = false }) => {
+  const [state, setState] = useState<UserForm>({
     username: '',
     password: '',
   });
@@ -34,12 +33,7 @@ const Register = () => {
   
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      await dispatch(registerUser(state)).unwrap();
-      navigate('/');
-    } catch (e) {
-      console.error(e);
-    }
+    onSubmit(state);
   };
   
   return (
@@ -65,7 +59,7 @@ const Register = () => {
                 label="Username"
                 name="username"
                 value={state.username}
-                autoComplete="new-username"
+                autoComplete={login ? 'username' : 'new-username'}
                 fullWidth
                 onChange={inputChangeHandler}
                 error={Boolean(getFieldError('username'))}
@@ -78,7 +72,7 @@ const Register = () => {
                 label="Password"
                 type="password"
                 value={state.password}
-                autoComplete="new-password"
+                autoComplete={login ? 'password' : 'new-password'}
                 fullWidth
                 onChange={inputChangeHandler}
                 error={Boolean(getFieldError('password'))}
@@ -94,10 +88,17 @@ const Register = () => {
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="center">
+            {login && (
+              <Grid item>
+                <Link component={RouterLink} to="/login" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            )}
             <Grid item>
-              <Link component={RouterLink} to="/login" variant="body2">
-                Already have an account? Sign in
+              <Link component={RouterLink} to="/register" variant="body2">
+                New user? Sign Up
               </Link>
             </Grid>
           </Grid>
@@ -106,4 +107,4 @@ const Register = () => {
     </Container>
   );
 };
-export default Register;
+export default UserForm;
