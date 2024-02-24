@@ -6,8 +6,10 @@ import { routes } from '../../constants';
 export const fetchAlbums = createAsyncThunk<AlbumMutation | null, string>(
   'albums/fetchAll',
   async (artistId) => {
-    const response = await axiosApi.get<AlbumMutation | null>(routes.albums + artistId);
-    
+    const response = await axiosApi.get<AlbumMutation | null>(
+      routes.albums + artistId,
+    );
+
     return response.data ?? null;
   },
 );

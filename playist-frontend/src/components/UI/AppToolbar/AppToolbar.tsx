@@ -1,5 +1,17 @@
 import { NavLink } from 'react-router-dom';
-import { AppBar, styled, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  Grid,
+  Stack,
+  styled,
+  Toolbar,
+  Typography,
+} from '@mui/material';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import { useAppSelector } from '../../../app/hooks';
+import { selectUser } from '../../../features/users/usersSlice';
+import UserMenu from './UserMenu';
+import GuestMenu from './GuestMenu';
 
 const Link = styled(NavLink)({
   color: 'inherit',
@@ -10,6 +22,8 @@ const Link = styled(NavLink)({
 });
 
 const AppToolbar = () => {
+  const user = useAppSelector(selectUser);
+
   return (
     <AppBar
       position="sticky"
@@ -23,9 +37,15 @@ const AppToolbar = () => {
       }}
     >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link to="/">Home</Link>
-        </Typography>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <MusicNoteIcon />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="/">Playist</Link>
+            </Typography>
+          </Stack>
+          {user ? <UserMenu user={user} /> : <GuestMenu />}
+        </Grid>
       </Toolbar>
     </AppBar>
   );

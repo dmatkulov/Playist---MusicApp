@@ -1,5 +1,14 @@
 import React from 'react';
-import { Box, Card, CardContent, CardMedia, Divider, Grid, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import { Album } from '../../../types';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { apiURL } from '../../../constants';
@@ -12,7 +21,7 @@ interface Props {
 
 const AlbumCard: React.FC<Props> = ({ album }) => {
   const navigate = useNavigate();
-  
+
   let cardImage = noCoverImage;
   if (album.cover) {
     cardImage = apiURL + '/' + album.cover;

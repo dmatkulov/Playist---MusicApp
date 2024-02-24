@@ -10,11 +10,11 @@ const ArtistList: React.FC = () => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
   const isLoading = useAppSelector(selectArtistsLoading);
-  
+
   useEffect(() => {
     dispatch(fetchArtists());
   }, [dispatch]);
-  
+
   return (
     <Container>
       <Typography variant="h1" component="h2" color="seagreen">

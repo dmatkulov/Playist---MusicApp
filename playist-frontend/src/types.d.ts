@@ -1,3 +1,9 @@
+export interface User {
+  _id: string;
+  username: string;
+  token: string;
+}
+
 export interface Artist {
   _id: string;
   name: string;
@@ -5,16 +11,17 @@ export interface Artist {
   cover: string | null;
 }
 
-export interface AlbumMutation {
-  artist: string;
-  albums: Album[];
-}
-
 interface Album {
   _id: string;
   title: string;
   yearOfRelease: number;
   cover: string | null;
+}
+
+//mutations
+export interface AlbumMutation {
+  artist: string;
+  albums: Album[];
 }
 
 export interface TrackMutation {
@@ -29,4 +36,31 @@ export interface Track {
   artist: Artist;
   album: Album;
   tracks: TrackMutation[];
+}
+
+export interface RegisterMutation {
+  username: string;
+  password: string;
+}
+
+//errors & responses
+export interface RegisterResponse {
+  message: string;
+  user: User;
+}
+
+export interface ValidationError {
+  errors: {
+    [key: string]: {
+      name: string;
+      message: string;
+    };
+  };
+  message: string;
+  name: string;
+  _message: string;
+}
+
+export interface GlobalError {
+  error: string;
 }
