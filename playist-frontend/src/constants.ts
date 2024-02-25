@@ -6,4 +6,5 @@ export const routes = {
   tracks: '/tracks?album=',
   register: '/users',
   login: '/users/sessions',
+  trackHistory: '/track_history',
 };

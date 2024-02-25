@@ -2,17 +2,25 @@ import React from 'react';
 import { Grid, IconButton, Typography } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { TrackMutation } from '../../../types';
+import { useAppDispatch } from '../../../app/hooks';
+import { addToHistory } from '../../trackHistories/tracksHistoriesThunks';
 
 interface Props {
   track: TrackMutation;
 }
 
 const TrackItem: React.FC<Props> = ({ track }) => {
+  const dispatch = useAppDispatch();
+  const addTrackToHistory = async () => {
+    await dispatch(addToHistory(track._id));
+    console.log(track._id);
+  };
+  
   return (
     <>
       <Grid container alignItems="center" gap={3} py={2} pr={2}>
         <Grid item>
-          <IconButton>
+          <IconButton onClick={addTrackToHistory}>
             <PlayCircleIcon sx={{ color: 'seagreen' }} />
           </IconButton>
         </Grid>

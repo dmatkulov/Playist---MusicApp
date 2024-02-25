@@ -19,7 +19,7 @@ interface Album {
 }
 
 interface TrackHistory {
-  trackId: string;
+  _id: string;
 }
 
 //mutations
