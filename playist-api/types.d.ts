@@ -36,4 +36,5 @@ export interface TrackHistoryFields {
   username: Types.ObjectId;
   track: Types.ObjectId;
   datetime: string;
+  artist: Types.ObjectId;
 }

@@ -3,8 +3,31 @@ import { Types } from 'mongoose';
 import Track from '../models/Track';
 import TrackHistory from '../models/TrackHistory';
 import auth, { RequestWithUser } from '../middleware/auth';
+import Artist from '../models/Artist';
+import Album from '../models/Album';
 
 const tracksHistoryRouter = Router();
+
+tracksHistoryRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    const userId = req.user?._id;
+
+    const tracks = await TrackHistory.find({ username: userId })
+      .sort({ datetime: -1 })
+      .populate('artist track', 'name title');
+
+    const result = tracks.map((track) => ({
+      _id: track._id,
+      track: track.track,
+      artist: track.artist,
+      datetime: track.datetime,
+    }));
+
+    res.send(result);
+  } catch (e) {
+    next(e);
+  }
+});
 tracksHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     const userId = req.user?._id;
@@ -18,15 +41,25 @@ tracksHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
     }
 
     const track = await Track.findById(_id);
-
     if (!track) {
-      return res.status(404).send({ error: 'Track not found' });
+      return res.status(404).send({ error: 'Track not found!' });
+    }
+
+    const album = await Album.findById(track.album);
+    if (!album) {
+      return res.status(404).send({ error: 'Album not found!' });
+    }
+
+    const artist = await Artist.findById(album.artist);
+    if (!artist) {
+      return res.status(404).send({ error: 'Artist not found for the album!' });
     }
 
     const trackHistory = new TrackHistory({
       username: userId,
       track: _id,
       datetime: new Date(),
+      artist: artist._id,
     });
 
     await trackHistory.save();

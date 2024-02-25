@@ -22,7 +22,6 @@ const TrackSchema = new mongoose.Schema({
   listing: {
     type: Number,
     required: true,
-    unique: true,
   },
 });
 

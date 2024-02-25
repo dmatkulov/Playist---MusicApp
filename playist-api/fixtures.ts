@@ -19,7 +19,7 @@ const run = async () => {
   await mongoose.connect(config.mongoose.db);
   const db = mongoose.connection;
 
-  const collections = ['albums', 'artists', 'trackhistories', 'tracks', 'users'];
+  const collections = ['albums', 'artists', 'tracks', 'users', 'trackhistories'];
 
   for (const collectionName of collections) {
     await dropCollection(db, collectionName);
@@ -290,26 +290,31 @@ const run = async () => {
       username: user1,
       track: track1,
       datetime: new Date().toISOString(),
+      artist: artist1,
     },
     {
       username: user1,
       track: track2,
       datetime: new Date().toISOString(),
+      artist: artist1,
     },
     {
       username: user2,
       track: track3,
       datetime: new Date().toISOString(),
+      artist: artist1,
     },
     {
       username: user1,
       track: track4,
       datetime: new Date().toISOString(),
+      artist: artist1,
     },
     {
       username: user2,
       track: track5,
       datetime: new Date().toISOString(),
+      artist: artist1,
     },
   );
 
