@@ -49,17 +49,17 @@ const LoginUser: React.FC = () => {
           Sign in
         </Typography>
         
-        {error && <Alert severity="error" sx={{ mt: 3, width: '100%' }} />}
+        {error && <Alert severity="error" sx={{ mt: 3, width: '100%' }}>{error.error}</Alert>}
         <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 label="Username"
                 name="username"
+                fullWidth
+                autoComplete="current-username"
                 value={state.username}
                 onChange={inputChangeHandler}
-                autoComplete="current-username"
-                fullWidth
               />
             </Grid>
             <Grid item xs={12}>
@@ -67,10 +67,10 @@ const LoginUser: React.FC = () => {
                 name="password"
                 label="Password"
                 type="password"
+                fullWidth
+                autoComplete="current-password"
                 value={state.password}
                 onChange={inputChangeHandler}
-                autoComplete="current-password"
-                fullWidth
               />
             </Grid>
           </Grid>
@@ -78,6 +78,7 @@ const LoginUser: React.FC = () => {
             type="submit"
             fullWidth
             variant="contained"
+            color="success"
             sx={{ mt: 3, mb: 2 }}
           >
             Sign in

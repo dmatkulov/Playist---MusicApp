@@ -18,6 +18,10 @@ interface Album {
   cover: string | null;
 }
 
+interface TrackHistory {
+  trackId: string;
+}
+
 //mutations
 export interface AlbumMutation {
   artist: string;
@@ -38,7 +42,7 @@ export interface Track {
   tracks: TrackMutation[];
 }
 
-export interface UserForm {
+export interface RegisterMutation {
   username: string;
   password: string;
 }

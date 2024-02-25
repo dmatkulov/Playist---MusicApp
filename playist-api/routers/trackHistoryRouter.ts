@@ -1,47 +1,31 @@
 import { Router } from 'express';
-import User from '../models/User';
 import { Types } from 'mongoose';
 import Track from '../models/Track';
 import TrackHistory from '../models/TrackHistory';
+import auth, { RequestWithUser } from '../middleware/auth';
 
 const tracksHistoryRouter = Router();
-tracksHistoryRouter.post('/', async (req, res, next) => {
+tracksHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
   try {
-    const headerValue = req.get('Authorization');
+    const userId = req.user?._id;
 
-    if (!headerValue) {
-      return res.status(401).send({ error: 'No Authorization header present' });
-    }
-
-    const [_bearer, token] = headerValue.split(' ');
-
-    if (!token) {
-      return res.status(401).send({ error: 'Token is absent in headers' });
-    }
-
-    const user = await User.findOne({ token });
-
-    if (!user) {
-      return res.status(401).send({ error: 'Wrong token' });
-    }
-
-    const trackId = req.body.trackId as string;
+    const _id = req.body._id as string;
 
     try {
-      new Types.ObjectId(trackId);
+      new Types.ObjectId(_id);
     } catch (e) {
       return res.status(404).send({ error: 'Wrong track ID!' });
     }
 
-    const track = await Track.findById(trackId);
+    const track = await Track.findById(_id);
 
     if (!track) {
       return res.status(404).send({ error: 'Track not found' });
     }
 
     const trackHistory = new TrackHistory({
-      username: user._id,
-      track: trackId,
+      username: userId,
+      track: _id,
       datetime: new Date(),
     });
 

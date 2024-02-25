@@ -5,6 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../app/hooks';
 import { logOutUser } from '../../../features/users/usersSlice';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 interface Props {
   user: User;
@@ -36,20 +37,32 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           Track history
         </Typography>
       </Stack>
-      <Stack direction="row" spacing={3} alignItems="center">
-        {user.username}
-        <IconButton color="inherit" onClick={handleClick} sx={{ display: 'flex' }}>
-          <AccountCircleIcon />
-        </IconButton>
-      </Stack>
+      <IconButton color="inherit" onClick={handleClick} sx={{ display: 'flex', gap: 1 }} disableRipple>
+        <Typography variant="body1">
+          {user.username}
+        </Typography>
+        <AccountCircleIcon color="secondary" />
+      </IconButton>
       
       <Menu
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClose}
         keepMounted
+        sx={{ mt: 2 }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
       >
-        <MenuItem onClick={logOut}>Log out</MenuItem>
+        <MenuItem onClick={logOut}>
+          <LogoutIcon sx={{ mr: 2 }} />
+          Log out
+        </MenuItem>
       </Menu>
     </>
   );

@@ -3,7 +3,7 @@ import ArtistList from './features/artists/containers/ArtistList';
 import AlbumList from './features/albums/containers/AlbumList';
 import TrackList from './features/tracks/containers/TrackList';
 import Layout from './components/UI/Layout/Layout';
-import UserForm from './features/users/components/UserForm';
+import RegisterUser from './features/users/containers/RegisterUser';
 import LoginUser from './features/users/containers/LoginUser';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<ArtistList />} />
-          <Route path="/register" element={<UserForm />} />
+          <Route path="/register" element={<RegisterUser />} />
           <Route path="/login" element={<LoginUser />} />
           <Route path="/albums/:artistId" element={<AlbumList />} />
           <Route path="/albums/tracks/:albumId" element={<TrackList />} />
