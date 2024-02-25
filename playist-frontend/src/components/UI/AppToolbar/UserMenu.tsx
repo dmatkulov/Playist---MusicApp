@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from '@mui/material';
 import { User } from '../../../types';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -27,21 +27,32 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   
   return (
     <>
-      <Stack sx={{ flexGrow: 1 }} direction="row" spacing={5} alignItems="center" justifyContent="center">
-        <Typography variant="body1" component={NavLink} to="/trackslist" color="inherit"
-                    sx={{ textDecoration: 'none' }}>
-          Tracks
-        </Typography>
-        <Typography variant="body1" component={NavLink} to="/trackshistory" color="inherit"
-                    sx={{ textDecoration: 'none' }}>
-          Track history
+      <Stack
+        sx={{ flexGrow: 1 }}
+        direction="row"
+        spacing={5}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography
+          variant="body1"
+          component={NavLink}
+          to="/trackshistory"
+          color="inherit"
+          sx={{ textDecoration: 'none' }}
+        >
+          Recently played
         </Typography>
       </Stack>
-      <IconButton color="inherit" onClick={handleClick} sx={{ display: 'flex', gap: 1 }} disableRipple>
-        <Typography variant="body1">
-          {user.username}
-        </Typography>
-        <AccountCircleIcon color="secondary" />
+      <IconButton
+        color="inherit"
+        onClick={handleClick}
+        sx={{ display: 'flex', gap: 1 }}
+        disableRipple
+      >
+        <Tooltip title={user.username}>
+          <AccountCircleIcon color="secondary" />
+        </Tooltip>
       </IconButton>
       
       <Menu

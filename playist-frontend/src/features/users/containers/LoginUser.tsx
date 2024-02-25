@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { LockOpen } from '@mui/icons-material';
 
 import { login } from '../usersThunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectLoginError } from '../usersSlice';
+import { selectLoginError, setLoginError } from '../usersSlice';
 import { LoginMutation } from '../../../types';
 
 const LoginUser: React.FC = () => {
@@ -25,11 +25,19 @@ const LoginUser: React.FC = () => {
     });
   };
   
+  useEffect(() => {
+    dispatch(setLoginError(null));
+  }, [dispatch]);
+  
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     
-    await dispatch(login(state)).unwrap();
-    navigate('/');
+    try {
+      await dispatch(login(state)).unwrap();
+      navigate('/');
+    } catch (e) {
+      console.error(e);
+    }
   };
   
   return (
@@ -49,7 +57,11 @@ const LoginUser: React.FC = () => {
           Sign in
         </Typography>
         
-        {error && <Alert severity="error" sx={{ mt: 3, width: '100%' }}>{error.error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mt: 3, width: '100%' }}>
+            {error.error}
+          </Alert>
+        )}
         <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

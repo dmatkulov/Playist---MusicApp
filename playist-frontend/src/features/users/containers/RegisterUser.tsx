@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { RegisterMutation } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectRegisterError } from '../usersSlice';
+import { selectRegisterError, setRegisterError } from '../usersSlice';
 import { register } from '../usersThunks';
 
 const RegisterUser: React.FC = () => {
@@ -32,8 +32,13 @@ const RegisterUser: React.FC = () => {
     });
   };
   
+  useEffect(() => {
+    dispatch(setRegisterError(null));
+  }, [dispatch]);
+  
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    
     try {
       await dispatch(register(state)).unwrap();
       navigate('/');
@@ -64,6 +69,7 @@ const RegisterUser: React.FC = () => {
               <TextField
                 label="Username"
                 name="username"
+                type="text"
                 value={state.username}
                 autoComplete="new-username"
                 fullWidth

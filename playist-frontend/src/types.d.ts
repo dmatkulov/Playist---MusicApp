@@ -18,8 +18,23 @@ interface Album {
   cover: string | null;
 }
 
-interface TrackHistory {
+export interface Track {
+  artist: Artist;
+  album: Album;
+  tracks: TrackMutation[];
+}
+
+export interface RecentTrack {
   _id: string;
+  track: {
+    _id: string;
+    title: string;
+  };
+  artist: {
+    _id: string;
+    name: string;
+  };
+  datetime: string;
 }
 
 //mutations
@@ -36,10 +51,8 @@ export interface TrackMutation {
   listing: string;
 }
 
-export interface Track {
-  artist: Artist;
-  album: Album;
-  tracks: TrackMutation[];
+interface TrackHistoryMutation {
+  _id: string;
 }
 
 export interface RegisterMutation {

@@ -7,8 +7,6 @@ const LoadingPage: React.FC = () => {
       sx={{
         width: '100vw',
         height: '100vh',
-        background:
-          'linear-gradient(0deg, rgba(34,195,127,1) 0%, rgba(9,9,9,0.5816527294511555) 83%)',
         position: 'fixed',
         top: 0,
         bottom: 0,

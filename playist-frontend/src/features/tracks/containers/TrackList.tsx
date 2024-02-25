@@ -32,14 +32,14 @@ const TrackList: React.FC = () => {
       {tracks && (
         <Grid container spacing={4} justifyContent="space-between" mt={3}>
           <Grid item xs={3}>
-              <Link
-                href={`/albums/${tracks.artist._id}`}
-                underline="none"
-                sx={{ display: 'flex', gap: 1 }}
-              >
-                <ArrowBackIcon />
-                Back to albums
-              </Link>
+            <Link
+              href={`/albums/${tracks.artist._id}`}
+              underline="none"
+              sx={{ display: 'flex', gap: 1 }}
+            >
+              <ArrowBackIcon />
+              Back to albums
+            </Link>
             <Typography variant="h5" gutterBottom>
               {tracks.album.title}
             </Typography>

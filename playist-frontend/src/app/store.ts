@@ -12,6 +12,7 @@ import {
 } from 'redux-persist';
 import { PURGE, REGISTER, REHYDRATE } from 'redux-persist/es/constants';
 import { tracksReducer } from '../features/tracks/tracksSlice';
+import { recentTracksReducer } from '../features/recentTracks/recentTracksSlice';
 
 const usersPersistConfig = {
   key: 'playist:users',
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   artists: artistsReducer,
   albums: albumsReducer,
   tracks: tracksReducer,
+  recent: recentTracksReducer,
   users: persistReducer(usersPersistConfig, usersReducer),
 });
 

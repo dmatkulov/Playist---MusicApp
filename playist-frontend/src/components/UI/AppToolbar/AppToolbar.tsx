@@ -1,5 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { AppBar, Grid, Stack, styled, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  Grid,
+  Stack,
+  styled,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useAppSelector } from '../../../app/hooks';
 import { selectUser } from '../../../features/users/usersSlice';
@@ -16,7 +23,7 @@ const Link = styled(NavLink)({
 
 const AppToolbar = () => {
   const user = useAppSelector(selectUser);
-  
+
   return (
     <AppBar
       position="sticky"

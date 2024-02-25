@@ -26,6 +26,12 @@ export const usersSlice = createSlice({
     logOutUser: (state, { payload: action }) => {
       state.user = action;
     },
+    setRegisterError: (state, { payload: action }) => {
+      state.registerError = action;
+    },
+    setLoginError: (state, { payload: action }) => {
+      state.loginError = action;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -68,4 +74,4 @@ export const selectLoginLoading = (state: RootState) =>
   state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
 
-export const { logOutUser } = usersSlice.actions;
+export const { logOutUser, setRegisterError, setLoginError } = usersSlice.actions;
