@@ -19,10 +19,10 @@ const run = async () => {
   await mongoose.connect(config.mongoose.db);
   const db = mongoose.connection;
 
-  const collections = ['albums', 'artists', 'tracks', 'users', 'trackhistories'];
+  const models = [TrackHistory, Track, Album, Artist, User];
 
-  for (const collectionName of collections) {
-    await dropCollection(db, collectionName);
+  for (const model of models) {
+    await dropCollection(db, model.collection.collectionName);
   }
 
   const [artist1, artist2, artist3] = await Artist.create(
@@ -30,56 +30,58 @@ const run = async () => {
       name: 'The Beatles',
       about: 'The Beatles were an English rock band formed in Liverpool in 1960.',
       cover: 'fixtures/The_Beatles.jpeg',
+      isPublished: true,
     },
     {
       name: 'Pink Floyd',
       about: 'Pink Floyd are an English rock band formed in London in 1965.',
       cover: 'fixtures/Pink_Floyd.jpeg',
+      isPublished: true,
     },
     {
       name: 'Guns N’ Roses',
       about:
         "Guns N' Roses is an American hard rock band from Los Angeles, California, formed in March 1985 when local bands Hollywood Rose and L.A. Guns merged.",
       cover: 'fixtures/guns-and-roses.jpg',
+      isPublished: false,
     },
   );
 
-  const [album1, album2, album3, album4, album5, album6] = await Album.create(
+  const [album1, album2, album3, album4, album5] = await Album.create(
     {
       artist: artist1,
       title: 'Abbey Road',
       yearOfRelease: 1969,
       cover: 'fixtures/Beatles_-_Abbey_Road.jpg',
+      isPublished: true,
     },
     {
       artist: artist1,
       title: 'Revolver',
       yearOfRelease: 1967,
       cover: 'fixtures/Sgt.-Peppers-Lonely-Hearts Club-Band.jpg',
+      isPublished: true,
     },
     {
       artist: artist2,
       title: 'The Dark Side of the Moon',
       yearOfRelease: 1967,
       cover: 'fixtures/Dark_Side_of_the_Moon.jpeg',
+      isPublished: true,
     },
     {
       artist: artist2,
       title: 'Wish You Were Here',
       yearOfRelease: 1975,
       cover: 'fixtures/WishYouWereHere.jpg',
+      isPublished: true,
     },
     {
       artist: artist3,
       title: 'Use Your Illusion I',
       yearOfRelease: 1991,
       cover: 'fixtures/GnR--UseYourIllusion1.jpg',
-    },
-    {
-      artist: artist3,
-      title: 'Live On Air',
-      yearOfRelease: 2010,
-      cover: 'fixtures/guns-n-roses-lp-picture-disc-live-on-air.jpg',
+      isPublished: false,
     },
   );
 
@@ -89,199 +91,197 @@ const run = async () => {
       title: 'Come Together',
       duration: '4:20',
       listing: 1,
+      isPublished: true,
     },
     {
       album: album1,
       title: 'Oh! Darling',
       duration: '3:27',
       listing: 2,
+      isPublished: true,
     },
     {
       album: album1,
       title: 'Here Comes the Sun',
       duration: '3:06',
       listing: 3,
+      isPublished: true,
     },
     {
       album: album1,
       title: 'Something',
       duration: '3:03',
       listing: 4,
+      isPublished: true,
     },
     {
       album: album1,
       title: 'Because',
       duration: '2:46',
       listing: 5,
+      isPublished: true,
     },
     {
       album: album2,
       title: 'Taxman',
       duration: '2:41',
       listing: 1,
+      isPublished: true,
     },
     {
       album: album2,
       title: 'Love You To',
       duration: '3:10',
       listing: 2,
+      isPublished: true,
     },
     {
       album: album2,
       title: 'Eleanor Rigby',
       duration: '2:06',
       listing: 3,
+      isPublished: true,
     },
     {
       album: album2,
       title: 'Here, There and Everywhere',
       duration: '2:26',
       listing: 4,
+      isPublished: true,
     },
     {
       album: album2,
       title: "I'm Only Sleeping",
       duration: '3:02',
       listing: 5,
+      isPublished: true,
     },
     {
       album: album3,
       title: 'Speak to Me',
       duration: '1:30',
       listing: 1,
+      isPublished: true,
     },
     {
       album: album3,
       title: 'Breathe',
       duration: '2:43',
       listing: 2,
+      isPublished: true,
     },
     {
       album: album3,
       title: 'On the Run',
       duration: '3:30',
       listing: 3,
+      isPublished: true,
     },
     {
       album: album3,
       title: 'Time',
       duration: '7:06',
       listing: 4,
+      isPublished: true,
     },
     {
       album: album3,
       title: 'The Great Gig in the Sky',
       duration: '4:47',
       listing: 5,
+      isPublished: true,
     },
     {
       album: album4,
       title: 'Shine On You Crazy Diamond (Parts I-V)',
       duration: '13:32',
       listing: 1,
+      isPublished: true,
     },
     {
       album: album4,
       title: 'Welcome to the Machine',
       duration: '7:30',
       listing: 2,
+      isPublished: true,
     },
     {
       album: album4,
       title: 'Have a Cigar',
       duration: '5:08',
       listing: 3,
+      isPublished: true,
     },
     {
       album: album4,
       title: 'Wish You Were Here',
       duration: '5:40',
       listing: 4,
+      isPublished: true,
     },
     {
       album: album4,
       title: 'Shine On You Crazy Diamond (Parts VI-IX)',
       duration: '12:29',
       listing: 5,
+      isPublished: true,
     },
     {
       album: album5,
       title: 'November Rain',
       duration: '8:57',
       listing: 1,
+      isPublished: false,
     },
     {
       album: album5,
       title: "Don't Cry",
       duration: '4:44',
       listing: 2,
+      isPublished: false,
     },
     {
       album: album5,
       title: 'Live and Let Die',
       duration: '2:58',
       listing: 3,
+      isPublished: false,
     },
     {
       album: album5,
-      title: "Knockin' on Heaven's Door",
+      title: "Knocking on Heaven's Door",
       duration: '5:36',
       listing: 4,
+      isPublished: false,
     },
     {
       album: album5,
       title: 'Civil War',
       duration: '7:36',
       listing: 5,
+      isPublished: false,
     },
     {
       album: album5,
       title: 'Estranged',
       duration: '9:23',
       listing: 6,
-    },
-    {
-      album: album6,
-      title: 'Free Falling',
-      duration: '4:21',
-      listing: 1,
-    },
-    {
-      album: album6,
-      title: 'Patience',
-      duration: '6:49',
-      listing: 2,
-    },
-    {
-      album: album6,
-      title: 'Live and Let Die',
-      duration: '3:17',
-      listing: 4,
-    },
-    {
-      album: album6,
-      title: 'Down on the Farm',
-      duration: '3:43',
-      listing: 5,
-    },
-    {
-      album: album6,
-      title: 'Welcome to the Jungle',
-      duration: '4:26',
-      listing: 3,
+      isPublished: false,
     },
   );
 
   const [user1, user2] = await User.create(
     {
-      username: 'david',
-      password: 'JrDZn3hgrC4V',
+      username: 'user',
+      password: 'user',
       token: randomUUID(),
+      role: 'user',
     },
     {
-      username: 'john',
-      password: 'JrDZn3hgrC4V234',
+      username: 'admin',
+      password: 'admin',
       token: randomUUID(),
+      role: 'admin',
     },
   );
 

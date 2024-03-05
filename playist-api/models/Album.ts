@@ -1,11 +1,12 @@
 import mongoose, { Schema, Types } from 'mongoose';
 import Artist from './Artist';
+import { AlbumFields } from '../types';
 
-const AlbumSchema = new mongoose.Schema({
+const AlbumSchema = new mongoose.Schema<AlbumFields>({
   artist: {
     type: Schema.Types.ObjectId,
     ref: 'Artist',
-    required: true,
+    required: [true, 'Artist ID must be present'],
     validate: {
       validator: async (value: Types.ObjectId) => {
         const artist = await Artist.findById(value);
@@ -16,13 +17,18 @@ const AlbumSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: true,
+    required: [true, 'Title must be present'],
   },
   yearOfRelease: {
     type: Number,
-    required: true,
+    required: [true, 'Enter year of release'],
   },
   cover: String,
+  isPublished: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const Album = mongoose.model('Album', AlbumSchema);

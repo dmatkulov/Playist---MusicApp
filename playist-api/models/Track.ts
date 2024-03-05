@@ -1,7 +1,8 @@
 import mongoose, { Schema, Types } from 'mongoose';
 import Album from './Album';
+import { TrackFields } from '../types';
 
-const TrackSchema = new mongoose.Schema({
+const TrackSchema = new mongoose.Schema<TrackFields>({
   album: {
     type: Schema.Types.ObjectId,
     ref: 'Album',
@@ -16,12 +17,17 @@ const TrackSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: true,
+    required: [true, 'Title must be present'],
   },
   duration: String,
   listing: {
     type: Number,
+    required: [true, 'Track number must be present'],
+  },
+  isPublished: {
+    type: Boolean,
     required: true,
+    default: false,
   },
 });
 
