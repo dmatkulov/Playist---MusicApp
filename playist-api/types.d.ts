@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 /* Schema Fields */
 export interface UserFields {
@@ -9,6 +9,7 @@ export interface UserFields {
 }
 
 export interface ArtistFields {
+  user: mongoose.Types.ObjectId;
   name: string;
   about: string;
   cover: string;
@@ -16,6 +17,7 @@ export interface ArtistFields {
 }
 
 export interface AlbumFields {
+  user: mongoose.Types.ObjectId;
   artist: mongoose.Types.ObjectId;
   title: string;
   yearOfRelease: number;
@@ -24,6 +26,7 @@ export interface AlbumFields {
 }
 
 export interface TrackFields {
+  user: mongoose.Types.ObjectId;
   album: mongoose.Types.ObjectId;
   title: string;
   duration: string;
@@ -41,12 +44,14 @@ export interface TrackHistoryFields {
 /* Mutations */
 
 export interface ArtistMutation {
+  user: mongoose.Types.ObjectId;
   name: string;
   about: string;
   cover: string | null;
 }
 
 export interface AlbumMutation {
+  user: mongoose.Types.ObjectId;
   artist: string;
   title: string;
   yearOfRelease: number;
@@ -54,6 +59,7 @@ export interface AlbumMutation {
 }
 
 export interface TrackMutation {
+  user: mongoose.Types.ObjectId;
   album: string;
   title: string;
   duration: string;

@@ -1,7 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose, { Types, Schema } from 'mongoose';
 import { ArtistFields } from '../types';
+import User from './User';
 
 const ArtistSchema = new mongoose.Schema<ArtistFields>({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    validate: {
+      validator: async (value: Types.ObjectId) => {
+        const user = await User.findById(value);
+        return Boolean(user);
+      },
+      message: 'User does not exist!',
+    },
+  },
   name: {
     type: String,
     required: [true, 'Artist name cannot be empty'],

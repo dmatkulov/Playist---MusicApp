@@ -4,6 +4,15 @@ import User from '../models/User';
 
 const usersRouter = Router();
 
+usersRouter.get('/', async (req, res, next) => {
+  try {
+    const users = await User.find();
+    return res.send(users);
+  } catch (e) {
+    next(e);
+  }
+});
+
 usersRouter.post('/', async (req, res, next) => {
   try {
     const user = new User({

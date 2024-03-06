@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { imagesUpload } from '../multer';
-import { AlbumMutation } from '../types';
+import { AlbumFields, AlbumMutation } from '../types';
 import Album from '../models/Album';
 import mongoose, { Types } from 'mongoose';
 import Artist from '../models/Artist';
+import auth, { RequestWithUser } from '../middleware/auth';
+import permit from '../middleware/permit';
 
 const albumsRouter = Router();
 
@@ -20,14 +22,14 @@ albumsRouter.get('/', async (req, res, next) => {
       }
 
       const allAlbums = await Album.find({ artist: artistId }).sort({ yearOfRelease: -1 });
-      const artist = await Artist.findById(artistId);
+      const artist = await Artist.findById(artistId).select('name');
 
       if (!artist) {
         return res.status(404).send({ error: 'Artist not found!' });
       }
 
       albums = {
-        artist: artist.name,
+        artist,
         albums: allAlbums,
       };
     } else {
@@ -63,26 +65,80 @@ albumsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-albumsRouter.post('/', imagesUpload.single('cover'), async (req, res, next) => {
-  try {
-    const albumData: AlbumMutation = {
-      artist: req.body.artist,
-      title: req.body.title,
-      yearOfRelease: parseInt(req.body.yearOfRelease),
-      cover: req.file ? req.file.filename : null,
-    };
+albumsRouter.post(
+  '/',
+  auth,
+  permit('admin', 'user'),
+  imagesUpload.single('cover'),
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const userId = req.user?._id;
 
-    const album = new Album(albumData);
-    await album.save();
+      if (!userId) {
+        return res.status(404).send({ error: 'User not found' });
+      }
 
-    res.send(album);
-  } catch (e) {
-    if (e instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(e);
+      const albumData: AlbumMutation = {
+        user: userId,
+        artist: req.body.artist,
+        title: req.body.title,
+        yearOfRelease: parseInt(req.body.yearOfRelease),
+        cover: req.file ? req.file.filename : null,
+      };
+
+      const album = new Album(albumData);
+      await album.save();
+
+      res.send(album);
+    } catch (e) {
+      if (e instanceof mongoose.Error.ValidationError) {
+        return res.status(422).send(e);
+      }
+
+      next(e);
     }
+  },
+);
 
-    next(e);
-  }
-});
+albumsRouter.delete(
+  '/:id',
+  auth,
+  permit('admin', 'user'),
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const _id = req.params.id;
+      const userId = req.user?._id;
+
+      const adminRole = req.user?.role === 'admin';
+      const userRole = req.user?.role === 'user';
+
+      try {
+        new Types.ObjectId(_id);
+      } catch {
+        return res.status(404).send({ error: 'Wrong album ID!' });
+      }
+
+      const album = await Album.findById<AlbumFields>(_id);
+
+      if (!album) {
+        return res.status(404).send({ error: 'Album not found' });
+      }
+
+      if (adminRole) {
+        await Album.findByIdAndDelete(_id);
+        return res.send({ message: 'Album was deleted by admin' });
+      } else if (userRole) {
+        if (userId?.toString() === album.user.toString() && !album.isPublished) {
+          await Album.findOneAndDelete<AlbumFields>({ _id, user: userId, isPublished: false });
+          return res.send({ message: 'Album was deleted by user' });
+        } else {
+          return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
+        }
+      }
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
 
 export default albumsRouter;
