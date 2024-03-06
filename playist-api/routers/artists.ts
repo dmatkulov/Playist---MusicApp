@@ -1,17 +1,52 @@
 import { Router } from 'express';
 import Artist from '../models/Artist';
-import { ArtistFields, ArtistMutation } from '../types';
+import { ArtistFields, ArtistMutation, UserFields } from '../types';
 import mongoose, { Types } from 'mongoose';
 import { imagesUpload } from '../multer';
 import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
+import User from '../models/User';
 
 const artistsRouter = Router();
 
-artistsRouter.get('/', async (_req, res, next) => {
+artistsRouter.get('/', async (req, res, next) => {
   try {
-    const artists = await Artist.find();
-    res.send(artists);
+    let published;
+
+    const userId = req.query.userId as string;
+
+    if (userId) {
+      try {
+        new Types.ObjectId(userId);
+      } catch {
+        return res.status(404).send({ error: 'Wrong user ID!' });
+      }
+
+      const user = await User.findById<UserFields>(userId);
+
+      if (!user) {
+        return res.send({ error: 'User not found' });
+      }
+
+      const adminRole = user.role === 'admin';
+      const userRole = user.role === 'user';
+
+      if (adminRole) {
+        published = await Artist.find();
+      }
+
+      if (userRole) {
+        published = await Artist.find({
+          $or: [{ isPublished: true }, { user: userId, isPublished: false }],
+        });
+      }
+    }
+
+    if (userId === undefined) {
+      published = await Artist.find({ isPublished: true });
+    }
+
+    return res.send(published);
   } catch (e) {
     return next(e);
   }

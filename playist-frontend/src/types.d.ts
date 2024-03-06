@@ -10,6 +10,7 @@ export interface Artist {
   name: string;
   about: string | null;
   cover: string | null;
+  isPublished: boolean;
 }
 
 interface Album {

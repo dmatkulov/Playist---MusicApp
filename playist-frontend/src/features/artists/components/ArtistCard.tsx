@@ -43,6 +43,7 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
           flex: '1 0 auto',
         }}
       >
+        {artist.isPublished && <p>published</p>}
         <Typography component="div" variant="h5">
           {artist.name}
         </Typography>
