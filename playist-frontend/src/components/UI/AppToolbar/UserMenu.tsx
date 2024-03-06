@@ -1,32 +1,43 @@
 import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from '@mui/material';
+import { Button, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { User } from '../../../types';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../app/hooks';
-import { logOutUser } from '../../../features/users/usersSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import LogoutIcon from '@mui/icons-material/Logout';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { logOut } from '../../../features/users/usersThunks';
+import { selectLogOutLoading } from '../../../features/users/usersSlice';
+import LoadingPage from '../LoadingPage/LoadingPage';
 
 interface Props {
   user: User;
 }
 
 const UserMenu: React.FC<Props> = ({ user }) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector(selectLogOutLoading);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [publishEl, setPublishEl] = useState<HTMLElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => setAnchorEl(null);
   
-  const logOut = () => {
-    dispatch(logOutUser(null));
+  const handlePublishItem = (event: React.MouseEvent<HTMLElement>) => {
+    setPublishEl(event.currentTarget);
+  };
+  const handleClose = () => setAnchorEl(null);
+  const handlePublishClose = () => setPublishEl(null);
+  
+  const handleLogOut = () => {
+    dispatch(logOut());
     navigate('/');
   };
   
   return (
     <>
+      {loading && <LoadingPage />}
       <Stack
         sx={{ flexGrow: 1 }}
         direction="row"
@@ -43,17 +54,57 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         >
           Recently played
         </Typography>
+      
+      
       </Stack>
-      <IconButton
-        color="inherit"
-        onClick={handleClick}
-        sx={{ display: 'flex', gap: 1 }}
-        disableRipple
+      <Stack direction="row" alignItems="center" spacing={4}>
+        <Button
+          variant="contained"
+          color="secondary"
+          disableElevation
+          onClick={handlePublishItem}
+          endIcon={<KeyboardArrowDownIcon />}
+          size="small"
+          sx={{ borderRadius: 5, px: 2 }}
+        >
+          Publish
+        </Button>
+        <Stack direction="row" alignItems="center">
+          <Typography>{user.username}</Typography>
+          <IconButton
+            onClick={handleClick}
+            sx={{ display: 'flex', gap: 1 }}
+            disableRipple
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        </Stack>
+      </Stack>
+      <Menu
+        open={Boolean(publishEl)}
+        anchorEl={publishEl}
+        onClose={handlePublishClose}
+        keepMounted
+        sx={{ mt: 2 }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
       >
-        <Tooltip title={user.username}>
-          <AccountCircleIcon color="secondary" />
-        </Tooltip>
-      </IconButton>
+        <MenuItem>
+          New Artist
+        </MenuItem>
+        <MenuItem>
+          New Album
+        </MenuItem>
+        <MenuItem>
+          New Track
+        </MenuItem>
+      </Menu>
       
       <Menu
         open={Boolean(anchorEl)}
@@ -70,7 +121,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           horizontal: 'right',
         }}
       >
-        <MenuItem onClick={logOut}>
+        <MenuItem onClick={handleLogOut}>
           <LogoutIcon sx={{ mr: 2 }} />
           Log out
         </MenuItem>

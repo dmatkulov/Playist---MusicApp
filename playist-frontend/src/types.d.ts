@@ -2,6 +2,7 @@ export interface User {
   _id: string;
   username: string;
   token: string;
+  role: string;
 }
 
 export interface Artist {
@@ -67,7 +68,6 @@ export interface LoginMutation {
 
 //errors & responses
 export interface RegisterResponse {
-  message: string;
   user: User;
 }
 

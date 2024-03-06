@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Box, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { LockOpen } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 
 import { login } from '../usersThunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectLoginError, setLoginError } from '../usersSlice';
+import { selectLoginError, selectLoginLoading, setLoginError } from '../usersSlice';
+
 import { LoginMutation } from '../../../types';
 
 const LoginUser: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectLoginError);
+  const loading = useAppSelector(selectLoginLoading);
   
   const [state, setState] = useState<LoginMutation>({
     username: '',
@@ -86,15 +89,18 @@ const LoginUser: React.FC = () => {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="success"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign in
-          </Button>
+          <Grid item xs={12} textAlign="center">
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              sx={{ mt: 3, mb: 2, py: 1 }}
+              disableElevation
+              disabled={loading}
+              loading={loading}
+            >
+              Sign In
+            </LoadingButton>
+          </Grid>
           <Grid container justifyContent="center">
             <Grid item>
               <Link component={RouterLink} to="/register" variant="body2">

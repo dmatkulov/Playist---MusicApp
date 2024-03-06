@@ -7,6 +7,9 @@ import darkTheme from './darkTheme';
 
 import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
+import { addInterceptors } from './axiosApi';
+
+addInterceptors(store);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

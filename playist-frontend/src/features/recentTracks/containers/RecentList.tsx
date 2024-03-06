@@ -7,6 +7,8 @@ import { fetchRecent } from '../recentTracksThunks';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { selectUser } from '../../users/usersSlice';
+import { motion } from 'framer-motion';
+import Dialog from '../../../components/UI/Dialog/Dialog';
 
 const RecentList: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +17,20 @@ const RecentList: React.FC = () => {
   const recentTracks = useAppSelector(selectRecentTracks);
   const isLoading = useAppSelector(selectRecentLoading);
   
+  const listVariants = {
+    visible: (i: number) => ({
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        ease: 'easeIn',
+      },
+      y: 0,
+    }),
+    hidden: {
+      opacity: 0,
+      y: 10,
+    },
+  };
   
   useEffect(() => {
     if (!user) {
@@ -26,13 +42,24 @@ const RecentList: React.FC = () => {
   
   return (
     <div>
+      <Dialog />
       {isLoading && <LoadingPage />}
       <Stack direction="column" spacing={3} width="100%" mb={5}>
         <Typography variant="h4">Recent</Typography>
         <Divider />
       </Stack>
-      {recentTracks.map((recent) => (
-        <RecentItem key={recent._id} recent={recent} />
+      {recentTracks.map((recent, i) => (
+        <motion.div
+          key={recent._id}
+          variants={listVariants}
+          initial={'hidden'}
+          animate={'visible'}
+          custom={i}
+        >
+          <RecentItem
+            recent={recent}
+          />
+        </motion.div>
       ))}
     </div>
   );

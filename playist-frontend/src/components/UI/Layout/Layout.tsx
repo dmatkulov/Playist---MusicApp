@@ -1,15 +1,18 @@
 import React from 'react';
 import AppToolbar from '../AppToolbar/AppToolbar';
-import { Container, CssBaseline } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <Container maxWidth="lg">
-      <CssBaseline />
+    <Container maxWidth="lg" disableGutters>
       <header>
         <AppToolbar />
       </header>
-      <main>{children}</main>
+      <main>
+        <Box component="section">
+          {children}
+        </Box>
+      </main>
     </Container>
   );
 };
