@@ -67,6 +67,7 @@ export const usersSlice = createSlice({
     builder.addCase(logOut.pending, (state) => {
       state.logOutLoading = true;
     }).addCase(logOut.fulfilled, (state) => {
+      console.log(state.user?.username);
       state.logOutLoading = false;
     }).addCase(logOut.rejected, (state) => {
       state.logOutLoading = false;

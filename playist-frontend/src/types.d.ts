@@ -16,14 +16,24 @@ export interface Artist {
 interface Album {
   _id: string;
   title: string;
+  artist: string;
   yearOfRelease: number;
   cover: string | null;
+  isPublished: boolean;
 }
 
 export interface Track {
-  artist: Artist;
-  album: Album;
-  tracks: TrackMutation[];
+  album: {
+    _id: string;
+    artist: {
+      _id: string;
+      name: string;
+    };
+    title: string;
+    yearOfRelease: number;
+    cover: string | null;
+  };
+  tracks: TrackResponse[];
 }
 
 export interface RecentTrack {
@@ -41,16 +51,20 @@ export interface RecentTrack {
 
 //mutations
 export interface AlbumMutation {
-  artist: string;
+  artist: {
+    _id: string;
+    name: string;
+  };
   albums: Album[];
 }
 
-export interface TrackMutation {
+export interface TrackResponse {
   _id: string;
-  album: string;
   title: string;
   duration: string;
   listing: string;
+  isPublished: boolean;
+  
 }
 
 interface TrackHistoryMutation {

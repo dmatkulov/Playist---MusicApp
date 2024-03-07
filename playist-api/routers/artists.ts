@@ -11,25 +11,27 @@ const artistsRouter = Router();
 
 artistsRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
   try {
+    let artists;
     if (req.user) {
-      const adminRole = req.user.role === 'admin';
-      const userRole = req.user.role === 'user';
+      const isAdmin = req.user.role === 'admin';
+      const isUser = req.user.role === 'user';
 
-      if (adminRole) {
-        const artists = await Artist.find();
-        return res.send(artists);
+      if (isAdmin) {
+        artists = await Artist.find({}, { user: 0 });
       }
 
-      if (userRole) {
-        const artists = await Artist.find({
-          $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
-        });
-        return res.send(artists);
+      if (isUser) {
+        artists = await Artist.find(
+          {
+            $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
+          },
+          { user: 0 },
+        );
       }
     } else {
-      const artists = await Artist.find({ isPublished: true });
-      return res.send(artists);
+      artists = await Artist.find({ isPublished: true }, { user: 0 });
     }
+    return res.send(artists);
   } catch (e) {
     return next(e);
   }

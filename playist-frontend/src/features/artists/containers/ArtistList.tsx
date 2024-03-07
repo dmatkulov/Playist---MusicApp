@@ -10,11 +10,11 @@ const ArtistList: React.FC = () => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
   const isLoading = useAppSelector(selectArtistsLoading);
-
+  
   useEffect(() => {
     dispatch(fetchArtists());
   }, [dispatch]);
-
+  
   return (
     <Container>
       <Typography variant="h1" component="h2" color="seagreen">
@@ -30,12 +30,11 @@ const ArtistList: React.FC = () => {
         mt={4}
       >
         {isLoading && <LoadingPage />}
-        {artists.length > 0 &&
-          artists.map((artist) => (
-            <Grid key={artist._id} item xs={4}>
-              <ArtistCard artist={artist} />
-            </Grid>
-          ))}
+        {artists.map((artist) => (
+          <Grid key={artist._id} item xs={4}>
+            <ArtistCard artist={artist} />
+          </Grid>
+        ))}
       </Grid>
     </Container>
   );

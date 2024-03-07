@@ -12,18 +12,12 @@ tracksHistoryRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     const userId = req.user?._id;
 
-    const tracks = await TrackHistory.find({ username: userId })
+    const tracks = await TrackHistory.find({ username: userId }, { username: 0 })
       .sort({ datetime: -1 })
-      .populate('artist track', 'name title');
+      .populate({ path: 'track', select: 'title datetime duration' })
+      .populate({ path: 'artist', select: 'name' });
 
-    const result = tracks.map((track) => ({
-      _id: track._id,
-      track: track.track,
-      artist: track.artist,
-      datetime: track.datetime,
-    }));
-
-    res.send(result);
+    res.send(tracks);
   } catch (e) {
     next(e);
   }

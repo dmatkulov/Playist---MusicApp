@@ -2,21 +2,25 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Artist } from '../../types';
 import axiosApi from '../../axiosApi';
 import { routes } from '../../constants';
-import { RootState } from '../../app/store';
 
-export const fetchArtists = createAsyncThunk<Artist[], undefined, { state: RootState }>(
+export const fetchArtists = createAsyncThunk<Artist[]>(
   'artists/fetchAll',
-  async (_, { getState }) => {
-    const user = getState().users.user;
-    let url = routes.artists;
-    
-    if (user) {
-      const userId = user._id;
-      url = url + '?userId=' + userId;
-    }
-    
-    const response = await axiosApi.get<Artist[]>(url);
+  async () => {
+    const response = await axiosApi.get<Artist[]>(routes.artists);
     return response.data ?? [];
-    
+  },
+);
+
+export const publishArtist = createAsyncThunk<void, string>(
+  'artists/publish',
+  async (id) => {
+    await axiosApi.patch(`${routes.artists}/${id}/togglePublished`);
+  },
+);
+
+export const deleteArtist = createAsyncThunk<void, string>(
+  'artists/deleteOne',
+  async (id) => {
+    await axiosApi.delete(`${routes.artists}/${id}`);
   },
 );

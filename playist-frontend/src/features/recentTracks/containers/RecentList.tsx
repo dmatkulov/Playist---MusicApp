@@ -8,7 +8,6 @@ import { Divider, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { selectUser } from '../../users/usersSlice';
 import { motion } from 'framer-motion';
-import Dialog from '../../../components/UI/Dialog/Dialog';
 
 const RecentList: React.FC = () => {
   const navigate = useNavigate();
@@ -42,7 +41,6 @@ const RecentList: React.FC = () => {
   
   return (
     <div>
-      <Dialog />
       {isLoading && <LoadingPage />}
       <Stack direction="column" spacing={3} width="100%" mb={5}>
         <Typography variant="h4">Recent</Typography>

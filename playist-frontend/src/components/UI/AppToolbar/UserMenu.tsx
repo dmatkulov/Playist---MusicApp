@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { logOut } from '../../../features/users/usersThunks';
 import { selectLogOutLoading } from '../../../features/users/usersSlice';
 import LoadingPage from '../LoadingPage/LoadingPage';
+import { fetchArtists } from '../../../features/artists/artistsThunk';
 
 interface Props {
   user: User;
@@ -30,8 +31,9 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   const handleClose = () => setAnchorEl(null);
   const handlePublishClose = () => setPublishEl(null);
   
-  const handleLogOut = () => {
-    dispatch(logOut());
+  const handleLogOut = async () => {
+    await dispatch(logOut());
+    await dispatch(fetchArtists());
     navigate('/');
   };
   

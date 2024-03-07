@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { Artist } from '../../../types';
 import { apiURL } from '../../../constants';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../app/hooks';
+import { deleteArtist, fetchArtists, publishArtist } from '../artistsThunk';
+import CardMenu from '../../../components/MenuActions/CardMenu';
 
 interface Props {
   artist: Artist;
@@ -12,11 +15,22 @@ interface Props {
 
 const ArtistCard: React.FC<Props> = ({ artist }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   
   let cardImage = noCoverImage;
   if (artist.cover) {
-    cardImage = apiURL + '/' + artist.cover;
+    cardImage = `${apiURL}/${artist.cover}`;
   }
+  
+  const handlePublish = useCallback(async () => {
+    await dispatch(publishArtist(artist._id));
+    await dispatch(fetchArtists());
+  }, []);
+  
+  const handleDelete = useCallback(async () => {
+    await dispatch(deleteArtist(artist._id));
+    await dispatch(fetchArtists());
+  }, []);
   
   return (
     <Card
@@ -24,6 +38,7 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
         borderRadius: '12px',
         padding: 1.5,
         boxShadow: '0px 14px 80px rgba(34, 35, 58, 0.2)',
+        height: '100%',
       }}
     >
       <CardMedia
@@ -33,8 +48,11 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
           width: '100%',
           height: '200px',
           backgroundColor: 'rgba(0,0,0,0.8)',
+          p: 1,
         }}
-      />
+      >
+        <CardMenu isPublished={artist.isPublished} onDelete={handleDelete} onPublish={handlePublish} />
+      </CardMedia>
       <CardContent
         sx={{
           display: 'flex',
@@ -43,7 +61,7 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
           flex: '1 0 auto',
         }}
       >
-        {artist.isPublished && <p>published</p>}
+        
         <Typography component="div" variant="h5">
           {artist.name}
         </Typography>

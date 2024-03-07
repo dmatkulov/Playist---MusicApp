@@ -5,10 +5,11 @@ import Track from '../models/Track';
 import Album from '../models/Album';
 import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
+import userRole from '../middleware/userRole';
 
 const tracksRouter = Router();
 
-tracksRouter.get('/', async (req: RequestWithUser, res, next) => {
+tracksRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
   try {
     const albumId = req.query.album as string;
 
@@ -19,7 +20,10 @@ tracksRouter.get('/', async (req: RequestWithUser, res, next) => {
         return res.status(404).send({ error: 'Wrong album ID!' });
       }
 
-      let album;
+      const album = await Album.findById(albumId, { user: 0, isPublished: 0 }).populate({
+        path: 'artist',
+        select: 'name',
+      });
       let tracks;
 
       if (req.user) {
@@ -27,18 +31,23 @@ tracksRouter.get('/', async (req: RequestWithUser, res, next) => {
         const isUser = req.user.role === 'user';
 
         if (isAdmin) {
-          album = await Album.findById(albumId).populate({ path: 'artist', select: 'name' });
-          tracks = await Track.find({ album: albumId }).sort({ listing: 1 });
+          tracks = await Track.find({ album: albumId }, { album: 0, user: 0 }).sort({ listing: 1 });
         } else if (isUser) {
-          album = await Album.findById(albumId).populate({ path: 'artist', select: 'name' });
-          tracks = await Track.find({
-            album: albumId,
-            $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
-          }).sort({ listing: 1 });
+          tracks = await Track.find(
+            {
+              album: albumId,
+              $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
+            },
+            { album: 0, user: 0 },
+          ).sort({ listing: 1 });
         }
       } else {
-        album = await Album.findById(albumId).populate({ path: 'artist', select: 'name' });
-        tracks = await Track.find({ album: albumId, isPublished: true }).sort({ listing: 1 });
+        tracks = await Track.find(
+          { album: albumId, isPublished: true },
+          { album: 0, user: 0 },
+        ).sort({
+          listing: 1,
+        });
       }
 
       return res.send({ album, tracks });

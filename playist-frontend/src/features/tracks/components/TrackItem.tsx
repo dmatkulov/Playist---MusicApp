@@ -1,12 +1,12 @@
 import React from 'react';
 import { Grid, IconButton, Typography } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import { TrackMutation } from '../../../types';
+import { TrackResponse } from '../../../types';
 import { useAppDispatch } from '../../../app/hooks';
 import { addToHistory } from '../../recentTracks/recentTracksThunks';
 
 interface Props {
-  track: TrackMutation;
+  track: TrackResponse;
 }
 
 const TrackItem: React.FC<Props> = ({ track }) => {
@@ -14,7 +14,7 @@ const TrackItem: React.FC<Props> = ({ track }) => {
   const addTrackToHistory = async () => {
     await dispatch(addToHistory(track._id));
   };
-
+  
   return (
     <>
       <Grid container alignItems="center" gap={3} py={2} pr={2}>
@@ -32,6 +32,9 @@ const TrackItem: React.FC<Props> = ({ track }) => {
           <Typography variant="h6" fontWeight="bold">
             {track.title}
           </Typography>
+        </Grid>
+        <Grid item>
+        
         </Grid>
         <Grid item>
           <Typography variant="body2">{track.duration}</Typography>

@@ -14,40 +14,39 @@ albumsRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
   try {
     const artistId = req.query.artist as string;
 
-    if (!artistId) {
-      return res.status(400).send({ error: 'Artist ID is required!' });
-    }
-
-    try {
-      new Types.ObjectId(artistId);
-    } catch {
-      return res.status(404).send({ error: 'Wrong artist ID!' });
-    }
-
-    if (req.user) {
-      const isAdmin = req.user.role === 'admin';
-      const isUser = req.user.role === 'user';
-
-      if (isAdmin) {
-        const allAlbums = await Album.find({ artist: artistId }).sort({ yearOfRelease: -1 });
-        const artist = await Artist.findById(artistId).select('name');
-        return res.send({ artist, albums: allAlbums });
+    if (artistId) {
+      try {
+        new Types.ObjectId(artistId);
+      } catch {
+        return res.status(404).send({ error: 'Wrong artist ID!' });
       }
 
-      if (isUser) {
-        const allAlbums = await Album.find({
-          artist: artistId,
-          $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
-        }).sort({ yearOfRelease: -1 });
-        const artist = await Artist.findById(artistId).select('name');
-        return res.send({ artist, albums: allAlbums });
-      }
-    } else {
-      const allAlbums = await Album.find({ artist: artistId, isPublished: true }).sort({
-        yearOfRelease: -1,
-      });
       const artist = await Artist.findById(artistId).select('name');
-      return res.send({ artist, albums: allAlbums });
+      let albums;
+
+      if (req.user) {
+        const isAdmin = req.user.role === 'admin';
+        const isUser = req.user.role === 'user';
+
+        if (isAdmin) {
+          albums = await Album.find({ artist: artistId }, { user: 0 }).sort({
+            yearOfRelease: -1,
+          });
+        } else if (isUser) {
+          albums = await Album.find(
+            {
+              artist: artistId,
+              $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
+            },
+            { user: 0 },
+          ).sort({ yearOfRelease: -1 });
+        }
+      } else {
+        albums = await Album.find({ artist: artistId, isPublished: true }, { user: 0 }).sort({
+          yearOfRelease: -1,
+        });
+      }
+      return res.send({ artist, albums });
     }
   } catch (e) {
     return next(e);
