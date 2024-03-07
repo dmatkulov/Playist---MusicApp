@@ -6,37 +6,49 @@ import mongoose, { Types } from 'mongoose';
 import Artist from '../models/Artist';
 import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
+import userRole from '../middleware/userRole';
 
 const albumsRouter = Router();
 
-albumsRouter.get('/', async (req, res, next) => {
+albumsRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
   try {
-    let albums;
-    const artistId = req.query.artist;
+    const artistId = req.query.artist as string;
 
-    if (artistId) {
-      try {
-        new Types.ObjectId(artistId.toString());
-      } catch {
-        return res.status(404).send({ error: 'Wrong artist ID!' });
-      }
-
-      const allAlbums = await Album.find({ artist: artistId }).sort({ yearOfRelease: -1 });
-      const artist = await Artist.findById(artistId).select('name');
-
-      if (!artist) {
-        return res.status(404).send({ error: 'Artist not found!' });
-      }
-
-      albums = {
-        artist,
-        albums: allAlbums,
-      };
-    } else {
-      albums = await Album.find();
+    if (!artistId) {
+      return res.status(400).send({ error: 'Artist ID is required!' });
     }
 
-    res.send(albums);
+    try {
+      new Types.ObjectId(artistId);
+    } catch {
+      return res.status(404).send({ error: 'Wrong artist ID!' });
+    }
+
+    if (req.user) {
+      const isAdmin = req.user.role === 'admin';
+      const isUser = req.user.role === 'user';
+
+      if (isAdmin) {
+        const allAlbums = await Album.find({ artist: artistId }).sort({ yearOfRelease: -1 });
+        const artist = await Artist.findById(artistId).select('name');
+        return res.send({ artist, albums: allAlbums });
+      }
+
+      if (isUser) {
+        const allAlbums = await Album.find({
+          artist: artistId,
+          $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
+        }).sort({ yearOfRelease: -1 });
+        const artist = await Artist.findById(artistId).select('name');
+        return res.send({ artist, albums: allAlbums });
+      }
+    } else {
+      const allAlbums = await Album.find({ artist: artistId, isPublished: true }).sort({
+        yearOfRelease: -1,
+      });
+      const artist = await Artist.findById(artistId).select('name');
+      return res.send({ artist, albums: allAlbums });
+    }
   } catch (e) {
     return next(e);
   }

@@ -3,17 +3,14 @@ import { TrackFields, TrackMutation } from '../types';
 import { Types } from 'mongoose';
 import Track from '../models/Track';
 import Album from '../models/Album';
-import Artist from '../models/Artist';
 import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
 
 const tracksRouter = Router();
 
-tracksRouter.get('/', async (req, res, next) => {
+tracksRouter.get('/', async (req: RequestWithUser, res, next) => {
   try {
-    let tracks;
-    const albumId = req.query.album;
-    const artistId = req.query.artist;
+    const albumId = req.query.album as string;
 
     if (albumId) {
       try {
@@ -21,36 +18,31 @@ tracksRouter.get('/', async (req, res, next) => {
       } catch {
         return res.status(404).send({ error: 'Wrong album ID!' });
       }
-      const album = await Album.findById(albumId);
-      const artist = await Artist.findById(album?.artist);
-      const allTracks = await Track.find({ album: albumId }).sort({ listing: 1 });
 
-      tracks = {
-        artist,
-        album,
-        tracks: allTracks,
-      };
-    } else if (artistId) {
-      try {
-        new Types.ObjectId(artistId.toString());
-      } catch {
-        return res.status(404).send({ error: 'Wrong artist ID!' });
+      let album;
+      let tracks;
+
+      if (req.user) {
+        const isAdmin = req.user.role === 'admin';
+        const isUser = req.user.role === 'user';
+
+        if (isAdmin) {
+          album = await Album.findById(albumId).populate({ path: 'artist', select: 'name' });
+          tracks = await Track.find({ album: albumId }).sort({ listing: 1 });
+        } else if (isUser) {
+          album = await Album.findById(albumId).populate({ path: 'artist', select: 'name' });
+          tracks = await Track.find({
+            album: albumId,
+            $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
+          }).sort({ listing: 1 });
+        }
+      } else {
+        album = await Album.findById(albumId).populate({ path: 'artist', select: 'name' });
+        tracks = await Track.find({ album: albumId, isPublished: true }).sort({ listing: 1 });
       }
 
-      const albums = await Album.find({ artist: artistId });
-      const allTracks = albums.map((album) => {
-        return Track.find({ album: album._id });
-      });
-      const allTracksByArtist = await Promise.all(allTracks);
-
-      tracks = allTracksByArtist.reduce((acc, track) => {
-        return acc.concat(track);
-      }, []);
-    } else {
-      tracks = await Track.find();
+      return res.send({ album, tracks });
     }
-
-    res.send(tracks);
   } catch (e) {
     return next(e);
   }
