@@ -56,14 +56,8 @@ tracksRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
 
 tracksRouter.post('/', auth, permit('admin', 'user'), async (req: RequestWithUser, res, next) => {
   try {
-    const userId = req.user?._id;
-
-    if (!userId) {
-      return res.status(404).send({ error: 'User not found' });
-    }
-
     const trackData: TrackMutation = {
-      user: userId,
+      user: req.user?._id,
       album: req.body.album,
       title: req.body.title,
       duration: req.body.duration,
@@ -95,31 +89,25 @@ tracksRouter.delete(
       const _id = req.params.id;
       const userId = req.user?._id;
 
-      const adminRole = req.user?.role === 'admin';
-      const userRole = req.user?.role === 'user';
-
       try {
         new Types.ObjectId(_id);
       } catch {
         return res.status(404).send({ error: 'Wrong track ID' });
       }
 
-      const track = await Track.findById<TrackFields>(_id);
+      if (req.user) {
+        const isAdmin = req.user?.role === 'admin';
+        const isUser = req.user?.role === 'user';
 
-      if (!track) {
-        return res.status(404).send({ error: 'Track not found' });
-      }
-
-      if (adminRole) {
-        await Track.findByIdAndDelete(_id);
-        return res.send({ message: 'Track was deleted by admin' });
-      } else if (userRole) {
-        if (userId?.toString() === track.user.toString() && !track.isPublished) {
+        if (isAdmin) {
+          await Track.findByIdAndDelete(_id);
+          return res.send({ message: 'Track was deleted by admin' });
+        } else if (isUser) {
           await Track.findOneAndDelete<TrackFields>({ _id, user: userId, isPublished: false });
           return res.send({ message: 'Track was deleted by user' });
-        } else {
-          return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
         }
+      } else {
+        return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
       }
     } catch (e) {
       return next(e);

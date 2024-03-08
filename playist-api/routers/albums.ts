@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { imagesUpload } from '../multer';
-import { AlbumFields, AlbumMutation } from '../types';
+import { AlbumMutation } from '../types';
 import Album from '../models/Album';
 import mongoose, { Types } from 'mongoose';
 import Artist from '../models/Artist';
@@ -56,19 +56,18 @@ albumsRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
 albumsRouter.get('/:id', async (req, res, next) => {
   try {
     const albumId = req.params.id;
+
     try {
       new Types.ObjectId(albumId);
     } catch {
       return res.status(404).send({ error: 'Wrong album ID!' });
     }
 
-    const album = await Album.findById(albumId);
+    const results = await Album.findById(albumId).populate('artist', '_id name about cover');
 
-    if (!album) {
+    if (!results) {
       return res.status(404).send({ error: 'Album not found!' });
     }
-
-    const results = await Album.findById(albumId).populate('artist', '_id name about cover');
 
     res.send(results);
   } catch (e) {
@@ -84,10 +83,6 @@ albumsRouter.post(
   async (req: RequestWithUser, res, next) => {
     try {
       const userId = req.user?._id;
-
-      if (!userId) {
-        return res.status(404).send({ error: 'User not found' });
-      }
 
       const albumData: AlbumMutation = {
         user: userId,
@@ -123,31 +118,25 @@ albumsRouter.delete(
       const _id = req.params.id;
       const userId = req.user?._id;
 
-      const adminRole = req.user?.role === 'admin';
-      const userRole = req.user?.role === 'user';
-
       try {
         new Types.ObjectId(_id);
       } catch {
         return res.status(404).send({ error: 'Wrong album ID!' });
       }
 
-      const album = await Album.findById<AlbumFields>(_id);
+      if (req.user) {
+        const isAdmin = req.user?.role === 'admin';
+        const isUser = req.user?.role === 'user';
 
-      if (!album) {
-        return res.status(404).send({ error: 'Album not found' });
-      }
-
-      if (adminRole) {
-        await Album.findByIdAndDelete(_id);
-        return res.send({ message: 'Album was deleted by admin' });
-      } else if (userRole) {
-        if (userId?.toString() === album.user.toString() && !album.isPublished) {
-          await Album.findOneAndDelete<AlbumFields>({ _id, user: userId, isPublished: false });
+        if (isAdmin) {
+          await Album.findByIdAndDelete(_id);
+          return res.send({ message: 'Album was deleted by admin' });
+        } else if (isUser) {
+          await Album.findOneAndDelete({ _id, user: userId, isPublished: false });
           return res.send({ message: 'Album was deleted by user' });
-        } else {
-          return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
         }
+      } else {
+        return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
       }
     } catch (e) {
       return next(e);

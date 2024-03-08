@@ -3,19 +3,18 @@ import RecentItem from '../components/RecentItem';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectRecentLoading, selectRecentTracks } from '../recentTracksSlice';
 import LoadingPage from '../../../components/UI/LoadingPage/LoadingPage';
-import { fetchRecent } from '../recentTracksThunks';
 import { Divider, Stack, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { selectUser } from '../../users/usersSlice';
 import { motion } from 'framer-motion';
+import { fetchRecent } from '../recentTracksThunks';
 
 const RecentList: React.FC = () => {
-  const navigate = useNavigate();
-  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
   const recentTracks = useAppSelector(selectRecentTracks);
   const isLoading = useAppSelector(selectRecentLoading);
-
+  
   const listVariants = {
     visible: (i: number) => ({
       opacity: 1,
@@ -30,15 +29,15 @@ const RecentList: React.FC = () => {
       y: 10,
     },
   };
-
+  
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  
   useEffect(() => {
-    if (!user) {
-      navigate('/');
-    }
-
     dispatch(fetchRecent());
   }, [dispatch]);
-
+  
   return (
     <div>
       {isLoading && <LoadingPage />}
@@ -46,7 +45,7 @@ const RecentList: React.FC = () => {
         <Typography variant="h4">Recent</Typography>
         <Divider />
       </Stack>
-      {recentTracks.map((recent, i) => (
+      {recentTracks.length > 0 ? recentTracks.map((recent, i) => (
         <motion.div
           key={recent._id}
           variants={listVariants}
@@ -56,7 +55,15 @@ const RecentList: React.FC = () => {
         >
           <RecentItem recent={recent} />
         </motion.div>
-      ))}
+      )) : (
+        <Typography
+          variant="subtitle1"
+          textAlign="center"
+          sx={{ flexGrow: 1 }}
+        >
+          Tracks history not available
+        </Typography>
+      )}
     </div>
   );
 };

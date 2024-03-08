@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 const LoadingPage: React.FC = () => {
   return (
@@ -21,9 +21,6 @@ const LoadingPage: React.FC = () => {
       }}
     >
       <CircularProgress color="success" />
-      <Typography variant="h4" fontWeight="bold">
-        Loading...
-      </Typography>
     </Box>
   );
 };

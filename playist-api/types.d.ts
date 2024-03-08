@@ -44,14 +44,14 @@ export interface TrackHistoryFields {
 /* Mutations */
 
 export interface ArtistMutation {
-  user: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId | undefined;
   name: string;
   about: string;
   cover: string | null;
 }
 
 export interface AlbumMutation {
-  user: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId | undefined;
   artist: string;
   title: string;
   yearOfRelease: number;
@@ -59,11 +59,28 @@ export interface AlbumMutation {
 }
 
 export interface TrackMutation {
-  user: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId | undefined;
   album: string;
   title: string;
   duration: string;
   listing: number;
+}
+
+export interface TrackHistoryMutation {
+  _id: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
+  album: {
+    _id: mongoose.Types.ObjectId;
+    artist: {
+      _id: mongoose.Types.ObjectId;
+      name: string;
+    };
+    title: string;
+  };
+  title: string;
+  duration: string;
+  listing: number;
+  isPublished: boolean;
 }
 
 /* Schema Methods */

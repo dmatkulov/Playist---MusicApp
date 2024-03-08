@@ -15,7 +15,7 @@ import NewTrack from './features/tracks/containers/NewTrack';
 
 function App() {
   const user = useAppSelector(selectUser);
-
+  
   return (
     <>
       <Layout>
@@ -47,7 +47,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          
           <Route
             path="/track/new"
             element={
@@ -60,10 +60,22 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          
+          <Route
+            path="/trackshistory"
+            element={
+              <ProtectedRoute
+                isAllowed={
+                  user && (user.role === 'admin' || user.role === 'user')
+                }
+              >
+                <RecentList />
+              </ProtectedRoute>
+            }
+          />
+          
           <Route path="/albums/:artistId" element={<AlbumList />} />
           <Route path="/albums/tracks/:albumId" element={<TrackList />} />
-          <Route path="/trackshistory" element={<RecentList />} />
           <Route path="*" element={<h2>Not found!</h2>} />
         </Routes>
       </Layout>

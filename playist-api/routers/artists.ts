@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Artist from '../models/Artist';
-import { ArtistFields, ArtistMutation } from '../types';
+import { ArtistMutation } from '../types';
 import mongoose, { Types } from 'mongoose';
 import { imagesUpload } from '../multer';
 import auth, { RequestWithUser } from '../middleware/auth';
@@ -68,10 +68,6 @@ artistsRouter.post(
     try {
       const userId = req.user?._id;
 
-      if (!userId) {
-        return res.status(404).send({ error: 'User not found' });
-      }
-
       const artistData: ArtistMutation = {
         user: userId,
         name: req.body.name,
@@ -102,31 +98,25 @@ artistsRouter.delete(
       const _id = req.params.id;
       const userId = req.user?._id;
 
-      const adminRole = req.user?.role === 'admin';
-      const userRole = req.user?.role === 'user';
-
       try {
         new Types.ObjectId(_id);
       } catch {
         return res.status(404).send({ error: 'Wrong artist ID!' });
       }
 
-      const artist = await Artist.findById<ArtistFields>(_id);
+      if (req.user) {
+        const isAdmin = req.user?.role === 'admin';
+        const isUser = req.user?.role === 'user';
 
-      if (!artist) {
-        return res.status(404).send({ error: 'Artist not found' });
-      }
-
-      if (adminRole) {
-        await Artist.findByIdAndDelete(_id);
-        return res.send({ message: 'Artist was deleted by admin' });
-      } else if (userRole) {
-        if (userId?.toString() === artist.user.toString() && !artist.isPublished) {
-          await Artist.findOneAndDelete<ArtistFields>({ _id, user: userId, isPublished: false });
+        if (isAdmin) {
+          await Artist.findByIdAndDelete(_id);
+          return res.send({ message: 'Artist was deleted by admin' });
+        } else if (isUser) {
+          await Artist.findOneAndDelete({ _id, user: userId, isPublished: false });
           return res.send({ message: 'Artist was deleted by user' });
-        } else {
-          return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
         }
+      } else {
+        return res.status(403).send({ error: 'Forbidden! You have no rights to delete!' });
       }
     } catch (e) {
       return next(e);
