@@ -32,12 +32,21 @@ const AlbumList: React.FC = () => {
           </Stack>
 
           <Grid item container spacing={2} py={4}>
-            {albums.albums.length > 0 &&
+            {albums.albums.length > 0 ? (
               albums.albums.map((album) => (
                 <Grid key={album._id} item xs={4}>
                   <AlbumCard album={album} />
                 </Grid>
-              ))}
+              ))
+            ) : (
+              <Typography
+                variant="subtitle1"
+                textAlign="center"
+                sx={{ flexGrow: 1 }}
+              >
+                Albums not found
+              </Typography>
+            )}
           </Grid>
         </Grid>
       )}

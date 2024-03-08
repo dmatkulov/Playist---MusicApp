@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { User } from '../../../types';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import LogoutIcon from '@mui/icons-material/Logout';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,6 +17,7 @@ import { logOut } from '../../../features/users/usersThunks';
 import { selectLogOutLoading } from '../../../features/users/usersSlice';
 import LoadingPage from '../LoadingPage/LoadingPage';
 import { fetchArtists } from '../../../features/artists/artistsThunk';
+import RestoreIcon from '@mui/icons-material/Restore';
 
 interface Props {
   user: User;
@@ -53,17 +54,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         spacing={5}
         alignItems="center"
         justifyContent="center"
-      >
-        <Typography
-          variant="body1"
-          component={NavLink}
-          to="/trackshistory"
-          color="inherit"
-          sx={{ textDecoration: 'none' }}
-        >
-          Recently played
-        </Typography>
-      </Stack>
+      ></Stack>
       <Stack direction="row" alignItems="center" spacing={4}>
         <Button
           variant="contained"
@@ -122,6 +113,10 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           horizontal: 'right',
         }}
       >
+        <MenuItem onClick={() => navigate('/trackshistory')}>
+          <RestoreIcon sx={{ mr: 2 }} />
+          Recently played
+        </MenuItem>
         <MenuItem onClick={handleLogOut}>
           <LogoutIcon sx={{ mr: 2 }} />
           Log out

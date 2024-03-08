@@ -21,7 +21,7 @@ const TrackList: React.FC = () => {
   }, [dispatch]);
 
   let cardImage = noCoverImage;
-  if (tracks) {
+  if (tracks?.album.cover) {
     cardImage = `${apiURL}/${tracks.album.cover}`;
   }
 
@@ -66,9 +66,19 @@ const TrackList: React.FC = () => {
             px={2}
             sx={{ backgroundColor: 'rgba(166,166,166,0.06)', borderRadius: 3 }}
           >
-            {tracks.tracks.map((track) => (
-              <TrackItem track={track} key={track._id} />
-            ))}
+            {tracks.tracks.length > 0 ? (
+              tracks.tracks.map((track) => (
+                <TrackItem track={track} key={track._id} />
+              ))
+            ) : (
+              <Typography
+                variant="subtitle1"
+                textAlign="center"
+                sx={{ flexGrow: 1 }}
+              >
+                Track for this album not found
+              </Typography>
+            )}
           </Grid>
         </Grid>
       )}

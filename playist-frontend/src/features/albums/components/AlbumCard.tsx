@@ -40,12 +40,12 @@ const AlbumCard: React.FC<Props> = ({ album }) => {
   const handlePublish = useCallback(async () => {
     await dispatch(toggleAlbum(album._id));
     dispatch(fetchAlbums(album.artist));
-  }, []);
+  }, [dispatch]);
 
   const handleDelete = useCallback(async () => {
     await dispatch(deleteAlbum(album._id));
     await dispatch(fetchAlbums(album.artist));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

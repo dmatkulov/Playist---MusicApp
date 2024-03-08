@@ -158,7 +158,6 @@ const TrackForm: React.FC<Props> = ({ onSubmit }) => {
               label="Queue in album"
               name="listing"
               value={state.listing}
-              type="number"
               onChange={inputChangeHandler}
               error={Boolean(getFieldError('listing'))}
               helperText={getFieldError('listing')}

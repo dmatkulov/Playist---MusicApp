@@ -37,12 +37,12 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
   const handlePublish = useCallback(async () => {
     await dispatch(toggleArtist(artist._id));
     await dispatch(fetchArtists());
-  }, []);
+  }, [dispatch]);
 
   const handleDelete = useCallback(async () => {
     await dispatch(deleteArtist(artist._id));
     await dispatch(fetchArtists());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Card

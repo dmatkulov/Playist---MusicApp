@@ -27,12 +27,12 @@ const TrackItem: React.FC<Props> = ({ track }) => {
   const handlePublish = useCallback(async () => {
     await dispatch(toggleTrack(track._id));
     await dispatch(fetchTracks(track.album));
-  }, []);
+  }, [dispatch]);
 
   const handleDelete = useCallback(async () => {
     await dispatch(deleteTrack(track._id));
     await dispatch(fetchTracks(track.album));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
