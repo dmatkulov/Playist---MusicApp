@@ -19,7 +19,7 @@ const TrackSchema = new mongoose.Schema<TrackFields>({
   album: {
     type: Schema.Types.ObjectId,
     ref: 'Album',
-    required: true,
+    required: [true, 'Album must be present'],
     validate: {
       validator: async (value: Types.ObjectId) => {
         const track = await Album.findById(value);
@@ -35,7 +35,7 @@ const TrackSchema = new mongoose.Schema<TrackFields>({
   duration: String,
   listing: {
     type: Number,
-    required: [true, 'Track number must be present'],
+    required: true,
   },
   isPublished: {
     type: Boolean,

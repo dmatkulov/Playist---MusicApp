@@ -103,6 +103,9 @@ albumsRouter.post(
       res.send(album);
     } catch (e) {
       if (e instanceof mongoose.Error.ValidationError) {
+        if (e.errors && e.errors.yearOfRelease) {
+          e.errors.yearOfRelease.message = 'Release date must be a valid number';
+        }
         return res.status(422).send(e);
       }
 

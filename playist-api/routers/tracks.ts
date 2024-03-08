@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { TrackFields, TrackMutation } from '../types';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Track from '../models/Track';
 import Album from '../models/Album';
 import auth, { RequestWithUser } from '../middleware/auth';
@@ -75,7 +75,14 @@ tracksRouter.post('/', auth, permit('admin', 'user'), async (req: RequestWithUse
 
     res.send(track);
   } catch (e) {
-    return next(e);
+    if (e instanceof mongoose.Error.ValidationError) {
+      if (e.errors && e.errors.listing) {
+        e.errors.listing.message = 'Track number must be a valid number';
+      }
+      return res.status(422).send(e);
+    }
+
+    next(e);
   }
 });
 

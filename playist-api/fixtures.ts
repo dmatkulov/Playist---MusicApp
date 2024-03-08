@@ -78,7 +78,7 @@ const run = async () => {
       title: 'Abbey Road',
       yearOfRelease: 1969,
       cover: 'fixtures/Beatles_-_Abbey_Road.jpg',
-      isPublished: false,
+      isPublished: true,
     },
     {
       user: user1,
@@ -201,7 +201,7 @@ const run = async () => {
       title: 'Speak to Me',
       duration: '1:30',
       listing: 1,
-      isPublished: false,
+      isPublished: true,
     },
     {
       user: user1,
