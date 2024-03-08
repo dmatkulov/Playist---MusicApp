@@ -8,18 +8,26 @@ interface Props {
   onPublish?: React.MouseEventHandler;
   onDelete: React.MouseEventHandler;
   isPublished?: boolean;
+  isDeleting: boolean;
+  isPublishing: boolean;
 }
 
-const MenuActions: React.FC<Props> = ({ onPublish, onDelete, isPublished = true }) => {
+const MenuActions: React.FC<Props> = ({
+  onPublish,
+  onDelete,
+  isPublished = true,
+  isDeleting,
+  isPublishing,
+}) => {
   const user = useAppSelector(selectUser);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleClose = () => setAnchorEl(null);
-  
+
   return (
     <>
       <IconButton onClick={handleClick}>
@@ -40,8 +48,14 @@ const MenuActions: React.FC<Props> = ({ onPublish, onDelete, isPublished = true 
           horizontal: 'right',
         }}
       >
-        {user && user.role === 'admin' && !isPublished && <MenuItem onClick={onPublish}>Publish</MenuItem>}
-        <MenuItem onClick={onDelete}>Delete</MenuItem>
+        {user && user.role === 'admin' && !isPublished && (
+          <MenuItem onClick={onPublish} disabled={isPublishing}>
+            Publish
+          </MenuItem>
+        )}
+        <MenuItem onClick={onDelete} disabled={isDeleting}>
+          Delete
+        </MenuItem>
       </Menu>
     </>
   );

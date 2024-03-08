@@ -10,11 +10,11 @@ const axiosApi = axios.create({
 export const addInterceptors = (store: Store<RootState>) => {
   axiosApi.interceptors.request.use((config) => {
     const token = store.getState().users.user?.token;
-    
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     return config;
   });
 };

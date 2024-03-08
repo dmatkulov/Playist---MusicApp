@@ -9,11 +9,17 @@ interface Props {
 
 const BackLink: React.FC<Props> = ({ location }) => {
   const navigate = useNavigate();
-  
+
   return (
     <div>
-      <Button component={Link} startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}
-              sx={{ textTransform: 'none', fontWeight: 'normal' }}>Back to {location}</Button>
+      <Button
+        component={Link}
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate(-1)}
+        sx={{ textTransform: 'none', fontWeight: 'normal' }}
+      >
+        Back to {location}
+      </Button>
     </div>
   );
 };

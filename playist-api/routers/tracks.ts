@@ -31,21 +31,18 @@ tracksRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
         const isUser = req.user.role === 'user';
 
         if (isAdmin) {
-          tracks = await Track.find({ album: albumId }, { album: 0, user: 0 }).sort({ listing: 1 });
+          tracks = await Track.find({ album: albumId }, { user: 0 }).sort({ listing: 1 });
         } else if (isUser) {
           tracks = await Track.find(
             {
               album: albumId,
               $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
             },
-            { album: 0, user: 0 },
+            { user: 0 },
           ).sort({ listing: 1 });
         }
       } else {
-        tracks = await Track.find(
-          { album: albumId, isPublished: true },
-          { album: 0, user: 0 },
-        ).sort({
+        tracks = await Track.find({ album: albumId, isPublished: true }, { user: 0 }).sort({
           listing: 1,
         });
       }
@@ -70,6 +67,7 @@ tracksRouter.post('/', auth, permit('admin', 'user'), async (req: RequestWithUse
       album: req.body.album,
       title: req.body.title,
       duration: req.body.duration,
+      listing: parseFloat(req.body.listing),
     };
 
     const track = new Track(trackData);

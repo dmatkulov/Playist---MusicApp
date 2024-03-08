@@ -17,7 +17,7 @@ artistsRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
       const isUser = req.user.role === 'user';
 
       if (isAdmin) {
-        artists = await Artist.find({}, { user: 0 });
+        artists = await Artist.find({}, { user: 0 }).sort({ _id: -1 });
       }
 
       if (isUser) {
@@ -26,10 +26,10 @@ artistsRouter.get('/', userRole, async (req: RequestWithUser, res, next) => {
             $or: [{ isPublished: true }, { user: req.user._id, isPublished: false }],
           },
           { user: 0 },
-        );
+        ).sort({ _id: -1 });
       }
     } else {
-      artists = await Artist.find({ isPublished: true }, { user: 0 });
+      artists = await Artist.find({ isPublished: true }, { user: 0 }).sort({ _id: -1 });
     }
     return res.send(artists);
   } catch (e) {

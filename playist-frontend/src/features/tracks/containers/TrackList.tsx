@@ -15,20 +15,20 @@ const TrackList: React.FC = () => {
   const tracks = useAppSelector(selectTracks);
   const isLoading = useAppSelector(selectTracksLoading);
   const { albumId } = useParams() as { albumId: string };
-  
+
   useEffect(() => {
     dispatch(fetchTracks(albumId));
   }, [dispatch]);
-  
+
   let cardImage = noCoverImage;
   if (tracks) {
     cardImage = `${apiURL}/${tracks.album.cover}`;
   }
-  
+
   return (
     <Container>
       {isLoading && <LoadingPage />}
-      
+
       {tracks && (
         <Grid container spacing={4} justifyContent="space-between" mt={3}>
           <Grid item xs={3}>
@@ -40,7 +40,9 @@ const TrackList: React.FC = () => {
               by {tracks.album.artist.name}
             </Typography>
             <Divider sx={{ my: 4 }} />
-            <Box sx={{ height: '300px', overflow: 'hidden', borderRadius: '12px' }}>
+            <Box
+              sx={{ height: '300px', overflow: 'hidden', borderRadius: '12px' }}
+            >
               <img
                 src={cardImage}
                 alt={tracks.album.title}
@@ -53,7 +55,7 @@ const TrackList: React.FC = () => {
               />
             </Box>
           </Grid>
-          
+
           <Grid
             item
             xs={8}

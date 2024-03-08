@@ -63,6 +63,7 @@ export interface TrackMutation {
   album: string;
   title: string;
   duration: string;
+  listing: number;
 }
 
 /* Schema Methods */

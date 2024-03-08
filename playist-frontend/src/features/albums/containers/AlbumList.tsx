@@ -13,22 +13,24 @@ const AlbumList: React.FC = () => {
   const albums = useAppSelector(selectAlbums);
   const isLoading = useAppSelector(selectAlbumsLoading);
   const { artistId } = useParams() as { artistId: string };
-  
+
   useEffect(() => {
     dispatch(fetchAlbums(artistId));
   }, [dispatch]);
-  
+
   return (
     <Container>
       {isLoading && <LoadingPage />}
       {albums && (
         <Grid container>
           <Stack direction="column" spacing={3} width="100%">
-            {albums && <Typography variant="h4">{albums.artist.name}</Typography>}
+            {albums && (
+              <Typography variant="h4">{albums.artist.name}</Typography>
+            )}
             <Divider />
             <BackLink location="artists" />
           </Stack>
-          
+
           <Grid item container spacing={2} py={4}>
             {albums.albums.length > 0 &&
               albums.albums.map((album) => (

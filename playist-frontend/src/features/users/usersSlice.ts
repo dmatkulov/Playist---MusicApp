@@ -49,7 +49,7 @@ export const usersSlice = createSlice({
         state.registerLoading = false;
         state.registerError = error || null;
       });
-    
+
     builder
       .addCase(login.pending, (state) => {
         state.loginLoading = true;
@@ -63,15 +63,18 @@ export const usersSlice = createSlice({
         state.loginLoading = false;
         state.loginError = error || null;
       });
-    
-    builder.addCase(logOut.pending, (state) => {
-      state.logOutLoading = true;
-    }).addCase(logOut.fulfilled, (state) => {
-      console.log(state.user?.username);
-      state.logOutLoading = false;
-    }).addCase(logOut.rejected, (state) => {
-      state.logOutLoading = false;
-    });
+
+    builder
+      .addCase(logOut.pending, (state) => {
+        state.logOutLoading = true;
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        console.log(state.user?.username);
+        state.logOutLoading = false;
+      })
+      .addCase(logOut.rejected, (state) => {
+        state.logOutLoading = false;
+      });
   },
 });
 
@@ -84,5 +87,7 @@ export const selectRegisterError = (state: RootState) =>
 export const selectLoginLoading = (state: RootState) =>
   state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
-export const selectLogOutLoading = (state: RootState) => state.users.logOutLoading;
-export const { unsetUser, setRegisterError, setLoginError } = usersSlice.actions;
+export const selectLogOutLoading = (state: RootState) =>
+  state.users.logOutLoading;
+export const { unsetUser, setRegisterError, setLoginError } =
+  usersSlice.actions;

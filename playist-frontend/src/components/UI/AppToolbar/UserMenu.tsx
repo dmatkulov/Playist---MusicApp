@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Button, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { User } from '../../../types';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -24,19 +31,19 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handlePublishItem = (event: React.MouseEvent<HTMLElement>) => {
     setPublishEl(event.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
   const handlePublishClose = () => setPublishEl(null);
-  
+
   const handleLogOut = async () => {
     await dispatch(logOut());
     await dispatch(fetchArtists());
     navigate('/');
   };
-  
+
   return (
     <>
       {loading && <LoadingPage />}
@@ -56,8 +63,6 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         >
           Recently played
         </Typography>
-      
-      
       </Stack>
       <Stack direction="row" alignItems="center" spacing={4}>
         <Button
@@ -69,7 +74,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           size="small"
           sx={{ borderRadius: 5, px: 2 }}
         >
-          Publish
+          Create
         </Button>
         <Stack direction="row" alignItems="center">
           <Typography>{user.username}</Typography>
@@ -97,17 +102,11 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           horizontal: 'right',
         }}
       >
-        <MenuItem>
-          New Artist
-        </MenuItem>
-        <MenuItem>
-          New Album
-        </MenuItem>
-        <MenuItem>
-          New Track
-        </MenuItem>
+        <MenuItem onClick={() => navigate('/artist/new')}>New Artist</MenuItem>
+        <MenuItem onClick={() => navigate('/album/new')}>New Album</MenuItem>
+        <MenuItem onClick={() => navigate('/track/new')}>New Track</MenuItem>
       </Menu>
-      
+
       <Menu
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}

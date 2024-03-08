@@ -15,7 +15,7 @@ const RecentList: React.FC = () => {
   const dispatch = useAppDispatch();
   const recentTracks = useAppSelector(selectRecentTracks);
   const isLoading = useAppSelector(selectRecentLoading);
-  
+
   const listVariants = {
     visible: (i: number) => ({
       opacity: 1,
@@ -30,15 +30,15 @@ const RecentList: React.FC = () => {
       y: 10,
     },
   };
-  
+
   useEffect(() => {
     if (!user) {
       navigate('/');
     }
-    
+
     dispatch(fetchRecent());
   }, [dispatch]);
-  
+
   return (
     <div>
       {isLoading && <LoadingPage />}
@@ -54,9 +54,7 @@ const RecentList: React.FC = () => {
           animate={'visible'}
           custom={i}
         >
-          <RecentItem
-            recent={recent}
-          />
+          <RecentItem recent={recent} />
         </motion.div>
       ))}
     </div>

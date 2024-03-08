@@ -1,13 +1,23 @@
 import React, { useCallback } from 'react';
-import { Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import noCoverImage from '../../../assets/images/artist-image-no-available.jpg';
 import { Artist } from '../../../types';
 import { apiURL } from '../../../constants';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../app/hooks';
-import { deleteArtist, fetchArtists, publishArtist } from '../artistsThunk';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { deleteArtist, fetchArtists, toggleArtist } from '../artistsThunk';
 import CardMenu from '../../../components/MenuActions/CardMenu';
+import {
+  selectArtistDeleteLoading,
+  selectArtistPublishLoading,
+} from '../artistsSlice';
 
 interface Props {
   artist: Artist;
@@ -16,22 +26,24 @@ interface Props {
 const ArtistCard: React.FC<Props> = ({ artist }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  
+  const publishLoading = useAppSelector(selectArtistPublishLoading);
+  const deleteLoading = useAppSelector(selectArtistDeleteLoading);
+
   let cardImage = noCoverImage;
   if (artist.cover) {
     cardImage = `${apiURL}/${artist.cover}`;
   }
-  
+
   const handlePublish = useCallback(async () => {
-    await dispatch(publishArtist(artist._id));
+    await dispatch(toggleArtist(artist._id));
     await dispatch(fetchArtists());
   }, []);
-  
+
   const handleDelete = useCallback(async () => {
     await dispatch(deleteArtist(artist._id));
     await dispatch(fetchArtists());
   }, []);
-  
+
   return (
     <Card
       sx={{
@@ -51,7 +63,13 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
           p: 1,
         }}
       >
-        <CardMenu isPublished={artist.isPublished} onDelete={handleDelete} onPublish={handlePublish} />
+        <CardMenu
+          isPublished={artist.isPublished}
+          onDelete={handleDelete}
+          onPublish={handlePublish}
+          isPublishing={publishLoading}
+          isDeleting={deleteLoading}
+        />
       </CardMedia>
       <CardContent
         sx={{
@@ -61,7 +79,6 @@ const ArtistCard: React.FC<Props> = ({ artist }) => {
           flex: '1 0 auto',
         }}
       >
-        
         <Typography component="div" variant="h5">
           {artist.name}
         </Typography>

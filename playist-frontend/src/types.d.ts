@@ -13,6 +13,11 @@ export interface Artist {
   isPublished: boolean;
 }
 
+export interface ArtistApi {
+  _id: string;
+  name: string;
+}
+
 interface Album {
   _id: string;
   title: string;
@@ -23,6 +28,15 @@ interface Album {
 }
 
 export interface Track {
+  _id: string;
+  title: string;
+  album: string;
+  duration: string;
+  listing: string;
+  isPublished: boolean;
+}
+
+export interface TrackApi {
   album: {
     _id: string;
     artist: {
@@ -33,7 +47,7 @@ export interface Track {
     yearOfRelease: number;
     cover: string | null;
   };
-  tracks: TrackResponse[];
+  tracks: Track[];
 }
 
 export interface RecentTrack {
@@ -49,8 +63,7 @@ export interface RecentTrack {
   datetime: string;
 }
 
-//mutations
-export interface AlbumMutation {
+export interface AlbumApi {
   artist: {
     _id: string;
     name: string;
@@ -58,17 +71,30 @@ export interface AlbumMutation {
   albums: Album[];
 }
 
-export interface TrackResponse {
+interface RecentTrackApi {
   _id: string;
+}
+
+//mutations
+
+export interface ArtistMutation {
+  name: string;
+  about: string;
+  cover: File | null;
+}
+
+export interface AlbumMutation {
+  artist: string;
+  title: string;
+  yearOfRelease: string;
+  cover: File | null;
+}
+
+export interface TrackMutation {
+  album: string;
   title: string;
   duration: string;
   listing: string;
-  isPublished: boolean;
-  
-}
-
-interface TrackHistoryMutation {
-  _id: string;
 }
 
 export interface RegisterMutation {

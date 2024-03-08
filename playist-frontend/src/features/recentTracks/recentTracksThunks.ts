@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
-import { RecentTrack, TrackHistoryMutation } from '../../types';
+import { RecentTrack, RecentTrackApi } from '../../types';
 import { routes } from '../../constants';
 import { RootState } from '../../app/store';
 
@@ -13,14 +13,14 @@ export const fetchRecent = createAsyncThunk<
     const state = thunkApi.getState();
     const token = state.users.user?.token;
     let recentTracks: RecentTrack[] = [];
-    
+
     if (token) {
       const response = await axiosApi.get<RecentTrack[]>(routes.trackHistory, {
         headers: { Authorization: `Bearer ${token}` },
       });
       recentTracks = response.data;
     }
-    
+
     return recentTracks;
   } catch (e) {
     console.error(e);
@@ -35,9 +35,9 @@ export const addToHistory = createAsyncThunk<
   try {
     const state = thunkApi.getState();
     const token = state.users.user?.token;
-    
+
     if (token) {
-      const trackData: TrackHistoryMutation = {
+      const trackData: RecentTrackApi = {
         _id: trackId,
       };
       await axiosApi.post(routes.trackHistory, trackData, {

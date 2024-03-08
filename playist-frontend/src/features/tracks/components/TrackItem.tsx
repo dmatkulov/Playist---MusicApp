@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Grid, IconButton, Typography } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import { TrackResponse } from '../../../types';
-import { useAppDispatch } from '../../../app/hooks';
+import { Track } from '../../../types';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { addToHistory } from '../../recentTracks/recentTracksThunks';
+import {
+  selectTrackDeleteLoading,
+  selectTrackPublishLoading,
+} from '../tracksSlice';
+import CardMenu from '../../../components/MenuActions/CardMenu';
+import { deleteTrack, fetchTracks, toggleTrack } from '../tracksThunks';
 
 interface Props {
-  track: TrackResponse;
+  track: Track;
 }
 
 const TrackItem: React.FC<Props> = ({ track }) => {
   const dispatch = useAppDispatch();
+  const publishLoading = useAppSelector(selectTrackPublishLoading);
+  const deleteLoading = useAppSelector(selectTrackDeleteLoading);
+
   const addTrackToHistory = async () => {
     await dispatch(addToHistory(track._id));
   };
-  
+
+  const handlePublish = useCallback(async () => {
+    await dispatch(toggleTrack(track._id));
+    await dispatch(fetchTracks(track.album));
+  }, []);
+
+  const handleDelete = useCallback(async () => {
+    await dispatch(deleteTrack(track._id));
+    await dispatch(fetchTracks(track.album));
+  }, []);
+
   return (
     <>
       <Grid container alignItems="center" gap={3} py={2} pr={2}>
@@ -34,10 +53,16 @@ const TrackItem: React.FC<Props> = ({ track }) => {
           </Typography>
         </Grid>
         <Grid item>
-        
+          <CardMenu
+            isPublished={track.isPublished}
+            onDelete={handleDelete}
+            onPublish={handlePublish}
+            isPublishing={publishLoading}
+            isDeleting={deleteLoading}
+          />
         </Grid>
         <Grid item>
-          <Typography variant="body2">{track.duration}</Typography>
+          <Typography variant="body2">duration {track.duration}</Typography>
         </Grid>
       </Grid>
     </>

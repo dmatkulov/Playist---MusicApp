@@ -9,9 +9,7 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <AppToolbar />
       </header>
       <main>
-        <Box component="section">
-          {children}
-        </Box>
+        <Box component="section">{children}</Box>
       </main>
     </Container>
   );

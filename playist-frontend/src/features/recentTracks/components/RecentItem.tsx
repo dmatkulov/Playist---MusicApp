@@ -10,7 +10,7 @@ interface Props {
 
 const RecentItem: React.FC<Props> = ({ recent }) => {
   const date = dayjs(recent.datetime).format('DD/MM/YYYY');
-  
+
   return (
     <>
       <Grid container alignItems="center" gap={3} py={2} pr={2}>
