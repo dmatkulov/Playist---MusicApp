@@ -4,14 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectRecentLoading, selectRecentTracks } from '../recentTracksSlice';
 import LoadingPage from '../../../components/UI/LoadingPage/LoadingPage';
 import { Divider, Stack, Typography } from '@mui/material';
-import { Navigate } from 'react-router-dom';
-import { selectUser } from '../../users/usersSlice';
 import { motion } from 'framer-motion';
 import { fetchRecent } from '../recentTracksThunks';
 
 const RecentList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
   const recentTracks = useAppSelector(selectRecentTracks);
   const isLoading = useAppSelector(selectRecentLoading);
   
@@ -29,10 +26,6 @@ const RecentList: React.FC = () => {
       y: 10,
     },
   };
-  
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
   
   useEffect(() => {
     dispatch(fetchRecent());
