@@ -5,18 +5,18 @@ import { LoadingButton } from '@mui/lab';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectLoginError, selectRegisterError, selectRegisterLoading, setRegisterError } from '../usersSlice';
-import { googleLogin, register } from '../usersThunks';
+import { selectGoogleLoginError, selectRegisterError, selectRegisterLoading, setRegisterError } from '../usersSlice';
+import { register } from '../usersThunks';
 
 import { RegisterMutation } from '../../../types';
-import { GoogleLogin } from '@react-oauth/google';
 import FileInput from '../../../components/FileInput/FileInput';
+import LoginWithGoogle from '../components/LoginWithGoogle';
 
 const RegisterUser: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const googleError = useAppSelector(selectGoogleLoginError);
   const error = useAppSelector(selectRegisterError);
-  const googleError = useAppSelector(selectLoginError);
   
   const loading = useAppSelector(selectRegisterLoading);
   
@@ -53,11 +53,6 @@ const RegisterUser: React.FC = () => {
         ...prevState, [name]: files[0],
       }));
     }
-  };
-  
-  const googleLoginHandler = async (credential: string) => {
-    await dispatch(googleLogin(credential)).unwrap();
-    navigate('/');
   };
   
   const submitFormHandler = async (event: React.FormEvent) => {
@@ -166,17 +161,7 @@ const RegisterUser: React.FC = () => {
         </Box>
       </Box>
       <Box>
-        <GoogleLogin
-          onSuccess={(
-            credentialResponse) => {
-            if (credentialResponse.credential) {
-              void googleLoginHandler(credentialResponse.credential);
-            }
-          }}
-          onError={() => {
-            console.log('Login failed');
-          }}
-        />
+        <LoginWithGoogle />
       </Box>
     </Container>
   );

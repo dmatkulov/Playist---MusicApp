@@ -108,7 +108,7 @@ export interface RegisterMutation {
 }
 
 export interface LoginMutation {
-  username: string;
+  email: string;
   password: string;
 }
 

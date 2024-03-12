@@ -10,6 +10,8 @@ interface UserState {
   loginLoading: boolean;
   loginError: GlobalError | null;
   logOutLoading: boolean;
+  googleLogin: boolean;
+  googleLoginError: GlobalError | null;
 }
 
 const initialState: UserState = {
@@ -19,6 +21,8 @@ const initialState: UserState = {
   loginLoading: false,
   loginError: null,
   logOutLoading: false,
+  googleLogin: false,
+  googleLoginError: null,
 };
 
 export const usersSlice = createSlice({
@@ -76,13 +80,14 @@ export const usersSlice = createSlice({
       });
     
     builder.addCase(googleLogin.pending, (state) => {
-      state.loginLoading = true;
+      state.googleLogin = true;
+      state.googleLoginError = null;
     }).addCase(googleLogin.fulfilled, (state, { payload: data }) => {
-      state.loginLoading = false;
+      state.googleLogin = false;
       state.user = data.user;
     }).addCase(googleLogin.rejected, (state, { payload: error }) => {
-      state.loginLoading = false;
-      state.loginError = error || null;
+      state.googleLogin = false;
+      state.googleLoginError = error || null;
     });
   },
 });
@@ -96,6 +101,7 @@ export const selectRegisterError = (state: RootState) =>
 export const selectLoginLoading = (state: RootState) =>
   state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
+export const selectGoogleLoginError = (state: RootState) => state.users.googleLoginError;
 export const selectLogOutLoading = (state: RootState) =>
   state.users.logOutLoading;
 export const { unsetUser, setRegisterError, setLoginError } =
