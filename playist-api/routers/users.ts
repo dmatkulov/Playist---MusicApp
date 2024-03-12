@@ -39,7 +39,7 @@ usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   }
 });
 
-usersRouter.post('/google', imagesUpload.single('avatar'), async (req, res, next) => {
+usersRouter.post('/google', async (req, res, next) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: req.body.credential,
@@ -69,18 +69,13 @@ usersRouter.post('/google', imagesUpload.single('avatar'), async (req, res, next
         password: crypto.randomUUID(),
         googleID: id,
         displayName,
-        avatar: req.file ? req.file.filename : null,
-      });
-
-      user.generateToken();
-
-      await user.save();
-
-      return res.send({
-        message: 'Login with Google successfull',
-        user,
+        avatar,
       });
     }
+
+    user.generateToken();
+    await user.save();
+    return res.send({ user });
   } catch (e) {
     return next(e);
   }
@@ -88,7 +83,7 @@ usersRouter.post('/google', imagesUpload.single('avatar'), async (req, res, next
 
 usersRouter.post('/sessions', async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
       return res.status(422).send({ error: 'Invalid credentials' });
@@ -97,7 +92,7 @@ usersRouter.post('/sessions', async (req, res, next) => {
     const isMatch = await user.checkPassword(req.body.password);
 
     if (!isMatch) {
-      return res.status(422).send({ error: 'Username and password do not match' });
+      return res.status(422).send({ error: 'Email and password do not match' });
     }
 
     user.generateToken();

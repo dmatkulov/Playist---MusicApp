@@ -9,7 +9,7 @@ const ProtectedRoute: React.FC<Props> = ({ isAllowed, children }) => {
   if (!isAllowed) {
     return <Navigate to="/login" />;
   }
-  
+
   return children;
 };
 

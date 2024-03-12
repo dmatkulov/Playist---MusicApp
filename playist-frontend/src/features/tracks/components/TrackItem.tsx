@@ -4,7 +4,10 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Track } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { addToHistory } from '../../recentTracks/recentTracksThunks';
-import { selectTrackDeleteLoading, selectTrackPublishLoading } from '../tracksSlice';
+import {
+  selectTrackDeleteLoading,
+  selectTrackPublishLoading,
+} from '../tracksSlice';
 import CardMenu from '../../../components/MenuActions/CardMenu';
 import { deleteTrack, fetchTracks, toggleTrack } from '../tracksThunks';
 
@@ -16,21 +19,21 @@ const TrackItem: React.FC<Props> = ({ track }) => {
   const dispatch = useAppDispatch();
   const publishLoading = useAppSelector(selectTrackPublishLoading);
   const deleteLoading = useAppSelector(selectTrackDeleteLoading);
-  
+
   const addTrackToHistory = async () => {
     await dispatch(addToHistory(track._id));
   };
-  
+
   const handlePublish = useCallback(async () => {
     await dispatch(toggleTrack(track._id));
     await dispatch(fetchTracks(track.album));
   }, [dispatch]);
-  
+
   const handleDelete = useCallback(async () => {
     await dispatch(deleteTrack(track._id));
     await dispatch(fetchTracks(track.album));
   }, [dispatch]);
-  
+
   return (
     <>
       <Grid container alignItems="center" gap={3} py={2} pr={2}>

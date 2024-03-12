@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Alert, Avatar, Box, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Container,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectGoogleLoginError, selectRegisterError, selectRegisterLoading, setRegisterError } from '../usersSlice';
+import {
+  selectGoogleLoginError,
+  selectRegisterError,
+  selectRegisterLoading,
+  setRegisterError,
+} from '../usersSlice';
 import { register } from '../usersThunks';
 
 import { RegisterMutation } from '../../../types';
@@ -17,16 +31,16 @@ const RegisterUser: React.FC = () => {
   const dispatch = useAppDispatch();
   const googleError = useAppSelector(selectGoogleLoginError);
   const error = useAppSelector(selectRegisterError);
-  
+
   const loading = useAppSelector(selectRegisterLoading);
-  
+
   const [state, setState] = useState<RegisterMutation>({
     email: '',
     displayName: '',
     password: '',
     avatar: null,
   });
-  
+
   const getFieldError = (fieldName: string) => {
     try {
       return error?.errors[fieldName].message;
@@ -34,30 +48,31 @@ const RegisterUser: React.FC = () => {
       return undefined;
     }
   };
-  
+
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setState((prevState) => {
       return { ...prevState, [name]: value };
     });
   };
-  
+
   useEffect(() => {
     dispatch(setRegisterError(null));
   }, [dispatch]);
-  
+
   const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files) {
-      setState(prevState => ({
-        ...prevState, [name]: files[0],
+      setState((prevState) => ({
+        ...prevState,
+        [name]: files[0],
       }));
     }
   };
-  
+
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+
     try {
       await dispatch(register(state)).unwrap();
       navigate('/');
@@ -65,7 +80,7 @@ const RegisterUser: React.FC = () => {
       console.error(e);
     }
   };
-  
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -82,13 +97,13 @@ const RegisterUser: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        
+
         {googleError && (
           <Alert severity="error" sx={{ mt: 3, width: '100%' }}>
             {googleError.error}
           </Alert>
         )}
-        
+
         <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -107,7 +122,7 @@ const RegisterUser: React.FC = () => {
             <Grid item xs={12}>
               <TextField
                 name="displayName"
-                label="Name"
+                label="First name"
                 type="displayName"
                 value={state.displayName}
                 autoComplete="new-displayName"
@@ -160,9 +175,9 @@ const RegisterUser: React.FC = () => {
           </Grid>
         </Box>
       </Box>
-      <Box>
+      <Grid container justifyContent="center">
         <LoginWithGoogle />
-      </Box>
+      </Grid>
     </Container>
   );
 };

@@ -13,7 +13,7 @@ const LoginWithGoogle = () => {
   return (
     <>
       <GoogleLogin
-        onSuccess={credentialResponse => {
+        onSuccess={(credentialResponse) => {
           if (credentialResponse.credential) {
             void googleLoginHandler(credentialResponse.credential);
           }

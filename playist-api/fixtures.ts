@@ -330,31 +330,31 @@ const run = async () => {
 
   await TrackHistory.create(
     {
-      email: user1,
+      user: user1,
       track: track1,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      email: user1,
+      user: user1,
       track: track2,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      email: user1,
+      user: user1,
       track: track3,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      email: user2,
+      user: user2,
       track: track4,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      email: user2,
+      user: user2,
       track: track5,
       datetime: new Date().toISOString(),
       artist: artist1,

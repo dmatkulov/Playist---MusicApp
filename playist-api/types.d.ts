@@ -38,7 +38,7 @@ export interface TrackFields {
 }
 
 export interface TrackHistoryFields {
-  email: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
   track: mongoose.Types.ObjectId;
   datetime: string;
   artist: mongoose.Types.ObjectId;

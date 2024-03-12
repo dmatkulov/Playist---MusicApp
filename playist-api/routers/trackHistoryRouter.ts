@@ -11,7 +11,7 @@ tracksHistoryRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     const userId = req.user?._id;
 
-    const tracks = await TrackHistory.find({ username: userId }, { username: 0 })
+    const tracks = await TrackHistory.find({ user: userId }, { user: 0 })
       .sort({ datetime: -1 })
       .populate({ path: 'track', select: 'title datetime duration' })
       .populate({ path: 'artist', select: 'name' });
@@ -47,13 +47,13 @@ tracksHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
     }
 
     await TrackHistory.findOneAndDelete({
-      username: userId,
+      user: userId,
       track: _id,
       artist: track?.album.artist._id,
     });
 
     const trackHistory = new TrackHistory({
-      username: userId,
+      user: userId,
       track: _id,
       datetime: new Date(),
       artist: track.album.artist._id,

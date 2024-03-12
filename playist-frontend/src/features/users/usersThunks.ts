@@ -1,5 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GlobalError, LoginMutation, RegisterMutation, RegisterResponse, ValidationError } from '../../types';
+import {
+  GlobalError,
+  LoginMutation,
+  RegisterMutation,
+  RegisterResponse,
+  ValidationError,
+} from '../../types';
 import axiosApi from '../../axiosApi';
 import { routes } from '../../constants';
 import { isAxiosError } from 'axios';
@@ -13,23 +19,23 @@ export const register = createAsyncThunk<
 >('users/register', async (registerMutation, { rejectWithValue }) => {
   try {
     const formData = new FormData();
-    
+
     const keys = Object.keys(registerMutation) as (keyof RegisterMutation)[];
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const value = registerMutation[key];
-      
+
       if (value !== null) {
         formData.append(key, value);
       }
     });
-    
+
     const response = await axiosApi.post(routes.register, formData);
     return response.data;
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 422) {
       return rejectWithValue(e.response.data);
     }
-    
+
     throw e;
   }
 });
@@ -49,26 +55,27 @@ export const login = createAsyncThunk<
     if (isAxiosError(e) && e.response && e.response.status === 422) {
       return rejectWithValue(e.response.data);
     }
-    
+
     throw e;
   }
 });
 
-export const googleLogin = createAsyncThunk<RegisterResponse, string, { rejectValue: GlobalError }>(
-  'users/googleLogin',
-  async (credential, { rejectWithValue }) => {
-    try {
-      const response = await axiosApi.post(routes.google, { credential });
-      return response.data;
-    } catch (e) {
-      if (isAxiosError(e) && e.response && e.response.status === 422) {
-        return rejectWithValue(e.response.data);
-      }
-      
-      throw e;
+export const googleLogin = createAsyncThunk<
+  RegisterResponse,
+  string,
+  { rejectValue: GlobalError }
+>('users/googleLogin', async (credential, { rejectWithValue }) => {
+  try {
+    const response = await axiosApi.post(routes.google, { credential });
+    return response.data;
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 422) {
+      return rejectWithValue(e.response.data);
     }
-  },
-);
+
+    throw e;
+  }
+});
 
 export const logOut = createAsyncThunk<void, undefined, { state: RootState }>(
   'users/logout',
