@@ -27,21 +27,21 @@ const run = async () => {
 
   const [user1, user2] = await User.create(
     {
-      email: 'user',
+      email: 'test1@test.com',
       displayName: 'user',
       password: 'user',
       token: randomUUID(),
       role: 'user',
     },
     {
-      email: 'user2',
+      email: 'test2@test.com',
       displayName: 'user2',
       password: 'user2',
       token: randomUUID(),
       role: 'user',
     },
     {
-      email: 'admin',
+      email: 'test3@test.com',
       displayName: 'admin',
       password: 'admin',
       token: randomUUID(),

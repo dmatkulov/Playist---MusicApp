@@ -39,7 +39,7 @@ usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   }
 });
 
-usersRouter.post('/google', async (req, res, next) => {
+usersRouter.post('/google', imagesUpload.single('avatar'), async (req, res, next) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: req.body.credential,
@@ -69,7 +69,7 @@ usersRouter.post('/google', async (req, res, next) => {
         password: crypto.randomUUID(),
         googleID: id,
         displayName,
-        avatar,
+        avatar: req.file ? req.file.filename : null,
       });
 
       user.generateToken();
