@@ -6,23 +6,27 @@ import { randomUUID } from 'crypto';
 const SALT_WORK_FACTOR = 10;
 
 const UserSchema = new mongoose.Schema<UserFields, UserModel, UserMethods>({
-  username: {
+  email: {
     type: String,
-    required: [true, 'Username must be provided!'],
+    required: [true, 'Email must be provided!'],
     unique: true,
     validate: {
       validator: async function (
         this: HydratedDocument<UserFields>,
-        username: string,
+        email: string,
       ): Promise<boolean> {
-        if (!this.isModified('username')) return true;
+        if (!this.isModified('email')) return true;
         const user: HydratedDocument<UserFields> | null = await User.findOne({
-          username: username,
+          email: email,
         });
         return !user;
       },
       message: 'This user is already registered!',
     },
+  },
+  displayName: {
+    type: String,
+    required: [true, 'Name must be provided!'],
   },
   password: {
     type: String,
@@ -38,6 +42,8 @@ const UserSchema = new mongoose.Schema<UserFields, UserModel, UserMethods>({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  avatar: String,
+  googleID: String,
 });
 
 UserSchema.methods.checkPassword = function (password: string) {

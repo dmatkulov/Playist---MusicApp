@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Avatar, Button, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { User } from '../../../types';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -18,6 +10,7 @@ import { selectLogOutLoading } from '../../../features/users/usersSlice';
 import LoadingPage from '../LoadingPage/LoadingPage';
 import { fetchArtists } from '../../../features/artists/artistsThunk';
 import RestoreIcon from '@mui/icons-material/Restore';
+import { apiURL } from '../../../constants';
 
 interface Props {
   user: User;
@@ -32,19 +25,19 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
+  
   const handlePublishItem = (event: React.MouseEvent<HTMLElement>) => {
     setPublishEl(event.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
   const handlePublishClose = () => setPublishEl(null);
-
+  
   const handleLogOut = async () => {
     await dispatch(logOut());
     await dispatch(fetchArtists());
     navigate('/');
   };
-
+  
   return (
     <>
       {loading && <LoadingPage />}
@@ -68,13 +61,13 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           Create
         </Button>
         <Stack direction="row" alignItems="center">
-          <Typography>{user.username}</Typography>
+          <Typography>{user.displayName}</Typography>
           <IconButton
             onClick={handleClick}
             sx={{ display: 'flex', gap: 1 }}
             disableRipple
           >
-            <AccountCircleIcon />
+            <Avatar alt={user.displayName} src={`${apiURL}/${user.avatar}`} sx={{ width: 24, height: 24 }} />
           </IconButton>
         </Stack>
       </Stack>
@@ -97,7 +90,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         <MenuItem onClick={() => navigate('/album/new')}>New Album</MenuItem>
         <MenuItem onClick={() => navigate('/track/new')}>New Track</MenuItem>
       </Menu>
-
+      
       <Menu
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}

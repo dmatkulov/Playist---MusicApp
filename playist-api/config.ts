@@ -8,5 +8,9 @@ const config = {
   mongoose: {
     db: 'mongodb://localhost/playist',
   },
+  google: {
+    clientId: process.env['GOOGLE_CLIENT_ID'],
+    clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+  },
 };
 export default config;

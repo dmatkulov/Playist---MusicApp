@@ -2,10 +2,13 @@ import mongoose, { Model } from 'mongoose';
 
 /* Schema Fields */
 export interface UserFields {
-  username: string;
+  email: string;
+  displayName: string;
   password: string;
   token: string;
   role: string;
+  avatar: string | null;
+  googleID?: string;
 }
 
 export interface ArtistFields {
@@ -35,7 +38,7 @@ export interface TrackFields {
 }
 
 export interface TrackHistoryFields {
-  username: mongoose.Types.ObjectId;
+  email: mongoose.Types.ObjectId;
   track: mongoose.Types.ObjectId;
   datetime: string;
   artist: mongoose.Types.ObjectId;

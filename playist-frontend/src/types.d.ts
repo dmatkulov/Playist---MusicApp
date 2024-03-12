@@ -1,8 +1,10 @@
 export interface User {
   _id: string;
-  username: string;
+  email: string;
   token: string;
   role: string;
+  displayName: string;
+  avatar: string;
 }
 
 export interface Artist {
@@ -13,9 +15,10 @@ export interface Artist {
   isPublished: boolean;
 }
 
-export interface ArtistApi {
-  _id: string;
-  name: string;
+export interface UserMutation {
+  email: string;
+  displayName: string;
+  avatar: File | null;
 }
 
 interface Album {
@@ -98,8 +101,10 @@ export interface TrackMutation {
 }
 
 export interface RegisterMutation {
-  username: string;
+  email: string;
+  displayName: string;
   password: string;
+  avatar: File | null;
 }
 
 export interface LoginMutation {

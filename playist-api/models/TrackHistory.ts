@@ -7,7 +7,7 @@ import Artist from './Artist';
 const Schema = mongoose.Schema;
 
 const TrackHistorySchema = new Schema<TrackHistoryFields>({
-  username: {
+  email: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,

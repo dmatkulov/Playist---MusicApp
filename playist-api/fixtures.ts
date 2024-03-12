@@ -27,19 +27,22 @@ const run = async () => {
 
   const [user1, user2] = await User.create(
     {
-      username: 'user',
+      email: 'user',
+      displayName: 'user',
       password: 'user',
       token: randomUUID(),
       role: 'user',
     },
     {
-      username: 'user2',
+      email: 'user2',
+      displayName: 'user2',
       password: 'user2',
       token: randomUUID(),
       role: 'user',
     },
     {
-      username: 'admin',
+      email: 'admin',
+      displayName: 'admin',
       password: 'admin',
       token: randomUUID(),
       role: 'admin',
@@ -327,31 +330,31 @@ const run = async () => {
 
   await TrackHistory.create(
     {
-      username: user1,
+      email: user1,
       track: track1,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      username: user1,
+      email: user1,
       track: track2,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      username: user1,
+      email: user1,
       track: track3,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      username: user2,
+      email: user2,
       track: track4,
       datetime: new Date().toISOString(),
       artist: artist1,
     },
     {
-      username: user2,
+      email: user2,
       track: track5,
       datetime: new Date().toISOString(),
       artist: artist1,
